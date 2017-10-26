@@ -29,6 +29,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import quanlythuvien.connect.ExportFile;
+import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.NhanVien;
 
@@ -37,8 +38,9 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 	private JTable table;
 	final JFileChooser fileDialog = new JFileChooser();
 	private ExportFile ef = new ExportFile();
+	private ImportFile imp = new ImportFile();
 	private String exFile;
-	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe;
+	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe, btnThemFile;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idNhanVien", "TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
 	private String[] thongKeVal = {"TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
@@ -194,11 +196,13 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 	}
 	
 	private JPanel createButCO() {
-		JPanel panel = new JPanel(new GridLayout(1, 2, 15, 5));
+		JPanel panel = new JPanel(new GridLayout(1, 3, 5, 5));
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
+		panel.add(btnThemFile = createButton("Thêm File"));
 		panel.add(btnXuatFile = createButton("Xuất File"));
+		btnXuatFile.setToolTipText("Xuất File");
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
 		return panel;
 	}
@@ -408,7 +412,22 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 		if(e.getSource() == btnThongKe) {
 			loadVar();
 			return;
-		}if(e.getSource() == btnXuatFile) {
+		}
+		if(e.getSource() == btnThemFile) {
+			int returnVal = fileDialog.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+	   			String path = fileDialog.getCurrentDirectory().toString()
+				       	   + "\\" + fileDialog.getSelectedFile().getName();
+	   			try {
+					imp.importFileNV(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	   		}
+			return;
+		}
+		if(e.getSource() == btnXuatFile) {
 			int returnVal = fileDialog.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 	   			String path = fileDialog.getCurrentDirectory().toString()

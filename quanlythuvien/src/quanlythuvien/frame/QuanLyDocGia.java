@@ -30,6 +30,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import quanlythuvien.connect.ExportFile;
+import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.DocGia;
 
@@ -38,7 +39,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
-	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnThongKe, btnXuatFile, btnCancel;
+	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnThongKe, btnXuatFile, btnThemFile, btnCancel;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idDocGia", "TenDG", "NgaySinh", "DiaChi", "GioiTinh"};
 	private String[] thongKeVal = {"TenDG", "GioiTinh", "DiaChi"};
@@ -46,7 +47,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	private boolean isupdate = false;
 	MyConnectDB myConn = new MyConnectDB();
 	private ExportFile ef = new ExportFile();
-	
+	private ImportFile imp = new ImportFile();
 	
 	
 	public QuanLyDocGia() {
@@ -198,12 +199,14 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	}
 	
 	private JPanel createButCO() {
-		JPanel panel = new JPanel(new GridLayout(1, 2, 15, 5));
+		JPanel panel = new JPanel(new GridLayout(1, 3, 5, 5));
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
+		panel.add(btnThemFile = createButton("Nhập File"));
 		panel.add(btnXuatFile = createButton("Xuất File"));
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
+		btnXuatFile.setToolTipText("Xuất File");
 		
 		return panel;
 	}
@@ -411,6 +414,21 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 		if(e.getSource() == btnTimKiem) {
 			String arr[] = getSearch();
 			loadData(arr[0], arr[1]);
+			return;
+		}
+		if(e.getSource() == btnThemFile) {
+			int returnVal = fileDialog.showOpenDialog(this);
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				String path = fileDialog.getCurrentDirectory().toString()
+				       	   + "\\" + fileDialog.getSelectedFile().getName();
+				try {
+					imp.importFileDG(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 			return;
 		}
 		if(e.getSource() == btnXuatFile) {
