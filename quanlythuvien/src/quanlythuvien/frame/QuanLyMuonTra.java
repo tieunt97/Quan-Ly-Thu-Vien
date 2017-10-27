@@ -41,7 +41,7 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
 	private ExportFile ef = new ExportFile();
-	private JButton btnThem, btnXuatFile, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe;
+	private JButton btnThem, btnXuatFile, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnInPhieu;
 	private JComboBox timKiemCB, thongKeCB, idNhanVienCB, idDocGiaCB, tableCB;
 	private String[] timKiemVal = {"All", "idMuonTra", "idDocGia", "idNhanVien", "NgayMuon", "NgayTra"};
 	private String[] thongKeVal = {"idDocGia", "idNhanVien", "NgayMuon"};
@@ -54,7 +54,7 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	public QuanLyMuonTra() {
 		add(createMainPanel());
 		
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setSize(1200, 720);
 		setLocationRelativeTo(null);
@@ -252,7 +252,7 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	
 	private JPanel createButAUD() {
 		JPanel panel = new JPanel(new GridLayout(1, 3, 10, 5));
-		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
+		panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 		panel.add(btnThem = createButton("Thêm"));
 		btnThem.setIcon(new ImageIcon(this.getClass().getResource("/add.png")));
 		panel.add(btnSua = createButton("Sửa"));
@@ -264,12 +264,15 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	}
 	
 	private JPanel createButCO() {
-		JPanel panel = new JPanel(new GridLayout(1, 2, 15, 5));
-		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
+		JPanel panel = new JPanel(new GridLayout(1, 3, 10, 5));
+		panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
+		panel.add(btnInPhieu = createButton("In Phiếu"));
+//		btnInPhieu.setToolTipText("In Phiếu");
 		panel.add(btnXuatFile = createButton("Xuất File"));
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
+//		btnXuatFile.setToolTipText("Xuất File");
 		
 		return panel;
 	}
@@ -538,6 +541,46 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == btnThongKe) {
 			loadVar();
+			return;
+		}
+		if(e.getSource() == btnInPhieu) {
+		
+			int row = table1.getSelectedRow();
+			if(row < 0) {
+				JOptionPane.showMessageDialog(this, "Bạn cần chọn cột chứa mã phiếu đó để in", "error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			int returnVal = fileDialog.showSaveDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+	   			String path = fileDialog.getCurrentDirectory().toString()
+				       	   + "\\" + fileDialog.getSelectedFile().getName();
+	   			if(path.indexOf(".docx") >= 0) {
+	   				exFile = path;
+	   			}
+	   			else {
+	   				exFile = path + ".docx";
+	   			}
+	   			System.out.println(exFile);
+	        }
+			
+			XWPFDocument doc = new XWPFDocument();
+			try {
+				ef.printHeader(exFile, doc, "Phiếu Mượn Trả", "");
+				ef.printContentPhieuMT(exFile, doc, table1, row);
+				ef.printEnd(exFile, doc);
+			} catch (InvalidFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return;
 		}
 		if(e.getSource() == btnXuatFile) {

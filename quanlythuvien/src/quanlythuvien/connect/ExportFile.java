@@ -2,6 +2,7 @@ package quanlythuvien.connect;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,12 +31,14 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class ExportFile {
 	
+	MyConnectDB connDB = new MyConnectDB();
+	
 	public void printHeader(String path, XWPFDocument doc, String tableName, String title) throws IOException, URISyntaxException, InvalidFormatException {
 		 XWPFParagraph par = doc.createParagraph();
 		 XWPFRun run = par.createRun();
 		 
 		 run.setText("TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI");
-		 run.setText("      CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM");
+		 run.setText("           CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM");
 		 run.setFontFamily("Cambria (Headings)");
 		 run.setFontSize(11);
 		 run.setBold(true);
@@ -42,11 +47,12 @@ public class ExportFile {
 		 run.setText("                                            Độc lập - tự do - hạnh phúc");
 		 run.addBreak();
 		 run.setText("          Nguyễn Tài Tiêu - 20153752    ");
-		 run.setText("                                   -----------------------------------------");
+		 run.setText("                                -----------------------------------------");
 		 run.addBreak();
-		 run.setText("                         ");
+		 run.setText("                             ");
 		 InputStream imgFile = this.getClass().getResourceAsStream("/bk.jpg");
 		 run.addPicture(imgFile, XWPFDocument.PICTURE_TYPE_PNG, "3", Units.toEMU(45), Units.toEMU(68));
+		 run.setFontSize(12);
 		 
 		 String date[] = getDate();
 		 XWPFParagraph par1 = doc.createParagraph();
@@ -338,6 +344,76 @@ public class ExportFile {
 		FileOutputStream fout = new FileOutputStream(new File(path));
 		doc.write(fout);
 		fout.close();
+	}
+	
+	public void printContentPhieuMT(String path, XWPFDocument doc, JTable table, int row) throws IOException, SQLException {
+		
+		int cols = 1;
+		if(table == null || row < 0) {
+			return;
+		}else
+			cols = table.getModel().getColumnCount();
+		String idMuonTra = (String) table.getValueAt(row, 0);
+		String idDocGia = (String) table.getValueAt(row, 1);
+		String idNhanVien = (String) table.getValueAt(row, 2);
+		String ngayMuon = (String) table.getValueAt(row, 3);
+		String ngayHenTra = (String) table.getValueAt(row, 4);
+		String datCoc = (String) table.getValueAt(row, 5);
+		String tenDG = "", tenNV = "";
+		
+		XWPFParagraph par = doc.createParagraph();
+		XWPFRun run = par.createRun();
+		
+		run.setText("                                   Mã Mượn Trả:   " + idMuonTra);
+		run.addBreak();
+		ResultSet rs = connDB.getNames("DocGia", "tenDG", "idDocGia", idDocGia);
+		while(rs.next()) {
+			tenDG = rs.getString(1);
+		}
+		run.setText("                                   Mã Độc Giả:   " + idDocGia + "                        Tên Độc Giả:   " + tenDG);
+		run.addBreak();
+		ResultSet rs1 = connDB.getNames("NhanVien", "tenNV", "idNhanVien", idNhanVien);
+		while(rs1.next()) {
+			tenNV = rs1.getString(1);
+		}
+		run.setText("                                   Mã Nhân Viên:   " + idNhanVien + "                   Tên Nhân Viên:   " + tenNV);
+		run.addBreak();
+		run.setText("                                   Ngày Mượn:   " + ngayMuon + "               Ngày Hẹn Trả:   " + ngayHenTra);
+		run.addBreak();
+		run.setText("                                   Tiền Cọc:   " + datCoc);
+		run.addBreak();
+//		par.setAlignment(ParagraphAlignment.CENTER);
+		
+		
+		XWPFTable xtable = doc.createTable();
+		xtable.setWidth(500);
+		xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
+				
+		XWPFTableRow titleRow = xtable.getRow(0);
+		titleRow.getCell(0).setText("TT");
+		titleRow.addNewTableCell().setText("Mã Mượn Trả");
+		titleRow.addNewTableCell().setText("Mã Sách");
+		titleRow.addNewTableCell().setText("Tên Sách");
+		titleRow.addNewTableCell().setText("Ngày Trả");
+		titleRow.addNewTableCell().setText("Tiền Phạt");
+		
+		ResultSet rs2 = connDB.getContentTablePhieuMT(idMuonTra);
+		int i = 1;
+		while(rs2.next()) {
+			XWPFTableRow nextRow = xtable.createRow();
+			nextRow.getCell(0).setText("" + i + "");
+			nextRow.getCell(1).setText(rs2.getString(1));
+			nextRow.getCell(2).setText(rs2.getString(2));
+			nextRow.getCell(3).setText(rs2.getString(3));
+			nextRow.getCell(4).setText(rs2.getString(4));
+			nextRow.getCell(5).setText(rs2.getString(5));
+		}
+		
+		
+		FileOutputStream fout = new FileOutputStream(new File(path));
+		doc.write(fout);
+		fout.close();
+		
 	}
 	
 	public void printEnd(String path, XWPFDocument doc) throws IOException {

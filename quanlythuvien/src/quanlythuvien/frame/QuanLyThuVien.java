@@ -19,10 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class QuanLyThuVien extends JFrame implements ActionListener{
-	private JButton btnQLS, btnQLDG, btnQLNV, btnQLMT, btnLogin, btnCancel;
-	private JLabel titleLab, labUser, labPassword;
-	private JTextField tfUser;
-	private JPasswordField pwd;
+	private JButton btnQLS, btnQLDG, btnQLNV, btnQLMT;
+	private JLabel titleLab;
 	Container conter;
 	
 	public QuanLyThuVien() {
@@ -39,10 +37,7 @@ public class QuanLyThuVien extends JFrame implements ActionListener{
 	private JPanel createMainPanel(int choose) {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(createTitlePanel(), BorderLayout.PAGE_START);
-		if(choose == 0) 
-			panel.add(createChoosePanel(), BorderLayout.CENTER);
-		else
-			panel.add(createLoginPanel(), BorderLayout.CENTER);
+		panel.add(createChoosePanel(), BorderLayout.CENTER);
 		
 		return panel;
 	}
@@ -81,44 +76,6 @@ public class QuanLyThuVien extends JFrame implements ActionListener{
 		return panel;
 	}
 	
-	private JPanel createLoginPanel() {
-		JPanel panel = new JPanel(new BorderLayout(15, 15));
-		panel.setBorder(new EmptyBorder(80, 60, 175, 60));
-		
-		JPanel panelLab = new JPanel(new GridLayout(2, 1, 15, 15));
-		panelLab.add(labUser = new JLabel("Username: "));
-		panelLab.add(labPassword = new JLabel("Password: "));
-		
-		JPanel panelTF = new JPanel(new GridLayout(2, 1, 15, 15));
-		panelTF.add(tfUser = new JTextField());
-		panelTF.add(pwd = new JPasswordField());
-		
-		JPanel panelBut = new JPanel(new GridLayout(1, 2, 10, 10));
-		panelBut.setBorder(new EmptyBorder(0, 35, 0, 35));
-		panelBut.add(btnLogin = new JButton("Đăng nhập"));
-		panelBut.add(btnCancel = new JButton("Hủy"));
-		btnLogin.addActionListener(this);
-		btnCancel.addActionListener(this);
-		
-		panel.add(panelLab, BorderLayout.WEST);
-		panel.add(panelTF, BorderLayout.CENTER);
-		panel.add(panelBut, BorderLayout.SOUTH);
-		
-		
-		return panel;
-	}
-	
-	
-	private void cancel() {
-		tfUser.setText("");
-		pwd.setText("");
-	}
-	private boolean checkUser() {
-		if(tfUser.getText().equals("admin") && pwd.getText().equals("admin"))
-			return true;
-		else return false;
-	}
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnQLS) {
@@ -137,17 +94,7 @@ public class QuanLyThuVien extends JFrame implements ActionListener{
 			QuanLyMuonTra qlMT = new QuanLyMuonTra();
 			qlMT.loadData("All", "");
 		}
-		if(e.getSource() == btnLogin) {
-			if(checkUser()) {
-				conter.removeAll();
-				conter.add(createMainPanel(0));
-			}else JOptionPane.showMessageDialog(this, "Lỗi đăng nhập");
-			return;
-		}
-		if(e.getSource() == btnCancel) {
-			cancel();
-			return;
-		}
+
 	}
 	
 	

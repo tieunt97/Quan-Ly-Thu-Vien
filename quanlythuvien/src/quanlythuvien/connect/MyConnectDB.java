@@ -80,6 +80,40 @@ public class MyConnectDB {
 		return rs;
 	}
 	
+	public ResultSet getNames(String table, String cot, String idName, String id) {
+		ResultSet rs = null;
+		String qSql = "select " + cot + " from " + table + " where " + idName + " = ?";
+		PreparedStatement ps;
+		try {
+			ps = (PreparedStatement) conn.prepareStatement(qSql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return rs;
+	}
+	public ResultSet getContentTablePhieuMT(String idMT) {
+		ResultSet rs = null;
+		String qSql = "select CTMT.idMuonTra, CTMT.idSach, S.tenSach, CTMT.ngayTra, CTMT.tienPhat " + 
+				"from ChiTietMuonTra CTMT, Sach S " + 
+				"where CTMT.idSach = S.idSach and CTMT.idMuonTra = ?";
+		
+		PreparedStatement ps;
+		try {
+			ps = (PreparedStatement) conn.prepareStatement(qSql);
+			ps.setString(1, idMT);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	
 	//Thong ke 
 	public ResultSet getVar(String table, String idT,String muonTK) {
 		ResultSet rs = null;
