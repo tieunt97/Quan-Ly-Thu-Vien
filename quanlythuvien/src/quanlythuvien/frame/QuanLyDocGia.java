@@ -10,13 +10,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,7 +32,7 @@ import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.DocGia;
 
-public class QuanLyDocGia extends JFrame implements ActionListener{
+public class QuanLyDocGia extends JPanel implements ActionListener{
 	private String titleCol[] = {"Mã ĐG", "Họ Tên", "Ngày Sinh", "Giới Tính", "Email", "Số ĐT", "Địa Chỉ"};
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
@@ -51,14 +49,10 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	
 	
 	public QuanLyDocGia() {
+		
+		setLayout(new BorderLayout());
 		add(createMainPanel());
-		
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setSize(1000, 650);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		
+		loadData("All", "");
 	}
 
 	private JPanel createMainPanel() {
@@ -113,7 +107,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 125, 20));								
+		panel.setBorder(new EmptyBorder(10, 0, 145, 20));								
 		panelLeft.add(new JLabel("Mã Độc Giả"));
 		panelLeft.add(new JLabel("Ngày Sinh"));
 		panelLeft.add(new JLabel("Email"));
@@ -133,7 +127,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 160, 20));											
+		panel.setBorder(new EmptyBorder(10, 0, 180, 20));											
 		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
 		panelLeft.add(new JLabel("Họ Tên"));
 		panelLeft.add(new JLabel("Giới Tính"));
@@ -152,7 +146,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 	
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2,1));
-		panel.setBorder(new EmptyBorder(10, 0, 50, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
 		panel.add(createTKTKPanel());
 		panel.add(createButPanel());
 		
@@ -366,7 +360,7 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 		if(select == 0) {
 			boolean ck = myConn.deleteIDRef("DocGia", "idDocGia", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if(ck) JOptionPane.showInternalMessageDialog(this.getContentPane(), "Xóa thành công");
+			if(ck) JOptionPane.showMessageDialog(null, "Xóa thành công");
 		}
 	}
 	
@@ -485,12 +479,6 @@ public class QuanLyDocGia extends JFrame implements ActionListener{
 			loadVar();
 			return;
 		}
-	}
-
-	
-	public static void main(String[] args) {
-		QuanLyDocGia qlDG = new QuanLyDocGia();
-		qlDG.loadData("All", "");
 	}
 
 }

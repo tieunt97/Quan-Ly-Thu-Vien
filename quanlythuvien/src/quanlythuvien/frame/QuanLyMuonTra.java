@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,10 +32,10 @@ import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.ChiTietMuonTra;
 import quanlythuvien.object.MuonTra;
 
-public class QuanLyMuonTra extends JFrame implements ActionListener{
+public class QuanLyMuonTra extends JPanel implements ActionListener{
 	private String titleCol[] = {"Mã Mượn Trả", "Mã Độc Giả", "Mã Nhân Viên", "Ngày Mượn", "Ngày Hẹn Trả", "Đặt Cọc"};
 	private String titleCol1[] = {"Mã Mượn Trả", "Mã Sách", "Ngày Trả", "Tiền Phạt"};
-	private String itemsTable[] = {"Mượn Trả", "Chỉ Tiết Mượn Trả"};
+	private String itemsTable[] = {"Mượn Trả", "Chi Tiết Mượn Trả"};
 	private JTable table1, table2;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
@@ -52,13 +51,10 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	
 	
 	public QuanLyMuonTra() {
-		add(createMainPanel());
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setSize(1200, 720);
-		setLocationRelativeTo(null);
-		setVisible(true);
+		setLayout(new BorderLayout());
+		add(createMainPanel());
+		loadData("All", "");
 	}
 
 	private JPanel createMainPanel() {
@@ -327,6 +323,10 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 				table2.setModel(model2);
 				model.addRow(arr);
 			}
+			if(!rs.next()) {
+				model2.setColumnIdentifiers(titleCol1);
+				table2.setModel(model2);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -404,7 +404,7 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 	}
 	
 	private MuonTra getMuonTra() {
-		String id = tfIdMT.getText().trim();
+		String id = tfIdMT.getText().trim().toUpperCase();
 		String idDG = idDocGiaCB.getSelectedItem().toString().trim();
 		String idNV = idNhanVienCB.getSelectedItem().toString().trim();
 		String ngaymuon = tfNgayMuon.getText().trim();
@@ -491,9 +491,9 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 			}else if(row1 >= 0) {
 				ck = myConn.deleteCTMT((String) table2.getValueAt(row1, 0), (String) table2.getValueAt(row1, 1));
 			}
-			loadData("All", "");
-			if(ck) JOptionPane.showInternalMessageDialog(this.getContentPane(), "Xóa thành công");
+			if(ck) JOptionPane.showMessageDialog(null, "Xóa thành công");
 		}
+		loadData("All", "");
 	}
 	
 	private void cancel() {
@@ -547,7 +547,7 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 		
 			int row = table1.getSelectedRow();
 			if(row < 0) {
-				JOptionPane.showMessageDialog(this, "Bạn cần chọn cột chứa mã phiếu đó để in", "error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Bạn cần chọn dòng chứa mã phiếu đó để in", "error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			int returnVal = fileDialog.showSaveDialog(this);
@@ -633,9 +633,4 @@ public class QuanLyMuonTra extends JFrame implements ActionListener{
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		QuanLyMuonTra qlMT = new QuanLyMuonTra();
-		qlMT.loadData("All", "");
-	}
 }

@@ -38,21 +38,20 @@ public class ExportFile {
 		 XWPFRun run = par.createRun();
 		 
 		 run.setText("TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI");
-		 run.setText("           CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM");
+		 run.setText("        CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM");
 		 run.setFontFamily("Cambria (Headings)");
 		 run.setFontSize(11);
 		 run.setBold(true);
 		 run.addBreak();
 		 run.setText("              Thư Viện Tạ Quang Bửu");
-		 run.setText("                                            Độc lập - tự do - hạnh phúc");
+		 run.setText("                                               Độc lập - tự do - hạnh phúc");
 		 run.addBreak();
 		 run.setText("          Nguyễn Tài Tiêu - 20153752    ");
-		 run.setText("                                -----------------------------------------");
+		 run.setText("                                      -----------------------------------------");
 		 run.addBreak();
-		 run.setText("                             ");
+		 run.setText("                          ");
 		 InputStream imgFile = this.getClass().getResourceAsStream("/bk.jpg");
 		 run.addPicture(imgFile, XWPFDocument.PICTURE_TYPE_PNG, "3", Units.toEMU(45), Units.toEMU(68));
-		 run.setFontSize(12);
 		 
 		 String date[] = getDate();
 		 XWPFParagraph par1 = doc.createParagraph();
@@ -401,7 +400,7 @@ public class ExportFile {
 		int i = 1;
 		while(rs2.next()) {
 			XWPFTableRow nextRow = xtable.createRow();
-			nextRow.getCell(0).setText("" + i + "");
+			nextRow.getCell(0).setText("" + i++ + "");
 			nextRow.getCell(1).setText(rs2.getString(1));
 			nextRow.getCell(2).setText(rs2.getString(2));
 			nextRow.getCell(3).setText(rs2.getString(3));
@@ -454,29 +453,4 @@ public class ExportFile {
 		return date;
 	}
 	
-	//main
-	public static void main(String[] args) {
-		ExportFile ef = new ExportFile();
-	    String[] date = new String[3];
-	    date = ef.getDate();
-	    System.out.println(date[0] + "/ " + date[1] + "/ " + date[2]);
-	    
-	    //test
-	    XWPFDocument doc = new XWPFDocument();
-	    try {
-			ef.printHeader("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\test.docx", doc, "Thông tin Sách", "Tìm kiếm theo Tên Tác Giả");
-			ef.printContentDG("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\test.docx", doc, null);
-			ef.printEnd("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\test.docx", doc);
-			System.out.println("print success.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

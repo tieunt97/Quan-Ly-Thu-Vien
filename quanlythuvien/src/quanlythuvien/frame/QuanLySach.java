@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +32,7 @@ import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.Sach;
 
-public class QuanLySach extends JFrame implements ActionListener {
+public class QuanLySach extends JPanel implements ActionListener {
 	private String titleCol[] = {"Mã Sách", "Tên Sách", "Nhà Xuất Bản", "Tên Tác Giả", "Năm Xuất Bản", "Giá Sách", "Thể Loại", "Ngôn Ngữ"};
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
@@ -51,13 +50,10 @@ public class QuanLySach extends JFrame implements ActionListener {
 	
 	
 	public QuanLySach() {
-		add(createMainPanel());
 		
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setSize(1000, 650);
-		setLocationRelativeTo(null);
-		setVisible(true);
+		setLayout(new BorderLayout());
+		add(createMainPanel());
+		loadData("All", "");
 	}
 
 	private JPanel createMainPanel() {
@@ -111,7 +107,7 @@ public class QuanLySach extends JFrame implements ActionListener {
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 145, 20));
 		panelLeft.add(new JLabel("Mã Sách"));
 		panelLeft.add(new JLabel("Nhà Xuất Bản"));
 		panelLeft.add(new JLabel("Năm Xuất Bản"));
@@ -132,7 +128,7 @@ public class QuanLySach extends JFrame implements ActionListener {
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 145, 20));
 		panelLeft.add(new JLabel("Tên Sách"));
 		panelLeft.add(new JLabel("Tên Tác Giả"));
 		panelLeft.add(new JLabel("Giá Sách"));
@@ -152,7 +148,7 @@ public class QuanLySach extends JFrame implements ActionListener {
 	
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2,1));
-		panel.setBorder(new EmptyBorder(10, 0, 50, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
 		panel.add(createTKTKPanel());
 		panel.add(createButPanel());
 		
@@ -372,7 +368,7 @@ public class QuanLySach extends JFrame implements ActionListener {
 		if(select == 0) {
 			boolean ck = myConn.deleteID("Sach", "idSach", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if(ck) JOptionPane.showInternalMessageDialog(this.getContentPane(), "Xóa thành công");
+			if(ck) JOptionPane.showMessageDialog(null, "Xóa thành công");
 		}
 	}
 	
@@ -495,10 +491,4 @@ public class QuanLySach extends JFrame implements ActionListener {
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		QuanLySach qlS = new QuanLySach();
-		qlS.loadData("All", "");
-	}
-
 }

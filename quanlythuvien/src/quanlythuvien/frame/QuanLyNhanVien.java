@@ -33,7 +33,7 @@ import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.NhanVien;
 
-public class QuanLyNhanVien extends JFrame implements ActionListener {
+public class QuanLyNhanVien extends JPanel implements ActionListener {
 	private String titleCol[] = {"Mã NV", "Họ Tên", "Ngày Sinh", "Giới Tính", "Địa Chỉ", "Số ĐT"};
 	private JTable table;
 	final JFileChooser fileDialog = new JFileChooser();
@@ -51,13 +51,10 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 	
 	
 	public QuanLyNhanVien() {
-		add(createMainPanel());
 		
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setSize(1000, 650);
-		setLocationRelativeTo(null);
-		setVisible(true);
+		setLayout(new BorderLayout());
+		add(createMainPanel());
+		loadData("All", "");
 	}
 
 	private JPanel createMainPanel() {
@@ -111,7 +108,7 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 	
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 160, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 180, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
 		panelLeft.add(new JLabel("Mã NV"));
 		panelLeft.add(new JLabel("Giới Tính"));
@@ -130,7 +127,7 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 160, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 180, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
 		panelLeft.add(new JLabel("Họ Tên"));
 		panelLeft.add(new JLabel("Địa Chỉ"));
@@ -149,7 +146,7 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 	
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2,1));
-		panel.setBorder(new EmptyBorder(10, 0, 50, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
 		panel.add(createTKTKPanel());
 		panel.add(createButPanel());
 		
@@ -360,7 +357,7 @@ public class QuanLyNhanVien extends JFrame implements ActionListener {
 		if(select == 0) {
 			boolean ck = myConn.deleteIDRef("NhanVien", "idNhanVien", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if(ck) JOptionPane.showInternalMessageDialog(this.getContentPane(), "Xóa thành công");
+			if(ck) JOptionPane.showMessageDialog(null, "Xóa thành công");
 		}
 	}
 	

@@ -137,15 +137,4 @@ public class ImportFile {
 		inputStream.close();
 	}
 	
-	public static void main(String[] args) {
-		ImportFile imp = new ImportFile();
-		try {
-			imp.importFileBook("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\Excel\\Book.xlsx");
-			imp.importFileDG("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\Excel\\DocGia.xlsx");
-			imp.importFileNV("C:\\Users\\tieu_nt\\Desktop\\demoPOI\\Excel\\NhanVien.xlsx");
-			System.out.println("importFile success.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
