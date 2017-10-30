@@ -4,13 +4,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import quanlythuvien.connect.MyConnectDB;
+
 public class Main extends JFrame{
 
 	private QuanLySach qlS;
 	private QuanLyDocGia qlDG;
 	private QuanLyNhanVien qlNV;
 	private QuanLyMuonTra qlMT;
-	
+	private MyConnectDB myConn = new MyConnectDB();
 	
 	public Main() {
 		setDisplay();
@@ -31,13 +33,13 @@ public class Main extends JFrame{
 	
 	private JTabbedPane createTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		qlS = new QuanLySach();
+		qlS = new QuanLySach(myConn);
 		tabbedPane.addTab("Quản Lý Sách",  new ImageIcon(this.getClass().getResource("/book.png")), qlS);
-		qlDG = new QuanLyDocGia();
+		qlDG = new QuanLyDocGia(myConn);
 		tabbedPane.addTab("Quản Lý Độc Giả", new ImageIcon(this.getClass().getResource("/per1.png")), qlDG);
-		qlNV = new QuanLyNhanVien();
+		qlNV = new QuanLyNhanVien(myConn);
 		tabbedPane.addTab("Quản Lý Nhân Viên", new ImageIcon(this.getClass().getResource("/per.png")), qlNV);
-		qlMT = new QuanLyMuonTra();
+		qlMT = new QuanLyMuonTra(myConn);
 		tabbedPane.addTab("Quản Lý Mượn Trả", new ImageIcon(this.getClass().getResource("/book1.png")), qlMT);
 		
 		return tabbedPane;

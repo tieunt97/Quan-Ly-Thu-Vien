@@ -37,8 +37,8 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	private String titleCol[] = {"Mã NV", "Họ Tên", "Ngày Sinh", "Giới Tính", "Địa Chỉ", "Số ĐT"};
 	private JTable table;
 	final JFileChooser fileDialog = new JFileChooser();
-	private ExportFile ef = new ExportFile();
-	private ImportFile imp = new ImportFile();
+	private ExportFile ef;
+	private ImportFile imp;
 	private String exFile;
 	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe, btnThemFile;
 	private JComboBox timKiemCB, thongKeCB;
@@ -46,11 +46,12 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	private String[] thongKeVal = {"TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
 	private JTextField tfIdNV, tfTimKiem, tfTenNV, tfNgaySinhNV, tfGioiTinhNV, tfDiaChiNV, tfSdtNV;
 	private boolean isupdate = false;
-	MyConnectDB myConn = new MyConnectDB();
+	MyConnectDB myConn;
 	
+	 
 	
-	
-	public QuanLyNhanVien() {
+	public QuanLyNhanVien(MyConnectDB connect) {
+		myConn = connect;
 		
 		setLayout(new BorderLayout());
 		add(createMainPanel());
@@ -78,8 +79,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel("Quản Lý Nhân Viên");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
-		label.setForeground(Color.BLUE);;
+		label.setForeground(Color.YELLOW);;
 		panel.add(label);
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -88,6 +90,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBorder(new EmptyBorder(5, 50, 10, 50));
 		panel.add(new JScrollPane(table = createTable()));
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -197,7 +200,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
-		panel.add(btnThemFile = createButton("Thêm File"));
+		panel.add(btnThemFile = createButton("Nhập File"));
 		panel.add(btnXuatFile = createButton("Xuất File"));
 		btnXuatFile.setToolTipText("Xuất File");
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
@@ -305,7 +308,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	}
 	
 	private NhanVien getNhanVien() {
-		String id = tfIdNV.getText().trim().toUpperCase(); //trim() dùng để loại bỏ khảng trắng ở hai đầu tf
+		String id = tfIdNV.getText().trim().toUpperCase(); 
 		String ten = tfTenNV.getText().trim();
 		if(id.equals("") || ten.equals("")) {
 			return null;
@@ -411,20 +414,26 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 			return;
 		}
 		if(e.getSource() == btnThemFile) {
+			imp = new ImportFile();
 			int returnVal = fileDialog.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 	   			String path = fileDialog.getCurrentDirectory().toString()
 				       	   + "\\" + fileDialog.getSelectedFile().getName();
 	   			try {
-					imp.importFileNV(path);
+					imp.importFileNV(path, myConn);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-	   		}
+	   		}else {
+	        	System.out.println("\ncanceled.");
+	        	return;
+	        }
+			
 			return;
 		}
 		if(e.getSource() == btnXuatFile) {
+			ef  = new ExportFile();
 			int returnVal = fileDialog.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 	   			String path = fileDialog.getCurrentDirectory().toString()
@@ -436,6 +445,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	   				exFile = path + ".docx";
 	   			}
 	   			System.out.println(exFile);
+	        }else {
+	        	System.out.println("\ncanceled.");
+	        	return;
 	        }
 			
 			XWPFDocument doc = new XWPFDocument();
@@ -476,10 +488,4 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		QuanLyNhanVien qlNV = new QuanLyNhanVien();
-		qlNV.loadData("All", "");
-	}
-
 }

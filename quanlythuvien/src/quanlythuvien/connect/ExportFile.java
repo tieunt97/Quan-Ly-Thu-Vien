@@ -29,9 +29,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-public class ExportFile {
-	
-	MyConnectDB connDB = new MyConnectDB();
+public class ExportFile { 
 	
 	public void printHeader(String path, XWPFDocument doc, String tableName, String title) throws IOException, URISyntaxException, InvalidFormatException {
 		 XWPFParagraph par = doc.createParagraph();
@@ -345,7 +343,7 @@ public class ExportFile {
 		fout.close();
 	}
 	
-	public void printContentPhieuMT(String path, XWPFDocument doc, JTable table, int row) throws IOException, SQLException {
+	public void printContentPhieuMT(String path, XWPFDocument doc, JTable table, int row, MyConnectDB connDB) throws IOException, SQLException {
 		
 		int cols = 1;
 		if(table == null || row < 0) {
@@ -363,23 +361,23 @@ public class ExportFile {
 		XWPFParagraph par = doc.createParagraph();
 		XWPFRun run = par.createRun();
 		
-		run.setText("                                   Mã Mượn Trả:   " + idMuonTra);
+		run.setText("                               Mã Mượn Trả:    " + idMuonTra);
 		run.addBreak();
 		ResultSet rs = connDB.getNames("DocGia", "tenDG", "idDocGia", idDocGia);
 		while(rs.next()) {
 			tenDG = rs.getString(1);
 		}
-		run.setText("                                   Mã Độc Giả:   " + idDocGia + "                        Tên Độc Giả:   " + tenDG);
+		run.setText("                               Mã Độc Giả:        " + idDocGia + "                         Tên Độc Giả:       " + tenDG);
 		run.addBreak();
 		ResultSet rs1 = connDB.getNames("NhanVien", "tenNV", "idNhanVien", idNhanVien);
 		while(rs1.next()) {
 			tenNV = rs1.getString(1);
 		}
-		run.setText("                                   Mã Nhân Viên:   " + idNhanVien + "                   Tên Nhân Viên:   " + tenNV);
+		run.setText("                               Mã Nhân Viên:   " + idNhanVien + "                         Tên Nhân Viên:   " + tenNV);
 		run.addBreak();
-		run.setText("                                   Ngày Mượn:   " + ngayMuon + "               Ngày Hẹn Trả:   " + ngayHenTra);
+		run.setText("                               Ngày Mượn:       " + ngayMuon + "                 Ngày Hẹn Trả:     " + ngayHenTra);
 		run.addBreak();
-		run.setText("                                   Tiền Cọc:   " + datCoc);
+		run.setText("                               Tiền Cọc:             " + datCoc);
 		run.addBreak();
 //		par.setAlignment(ParagraphAlignment.CENTER);
 		

@@ -46,11 +46,12 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	private String[] thongKeVal = {"idDocGia", "idNhanVien", "NgayMuon"};
 	private JTextField tfIdMT, tfTimKiem, tfNgayMuon, tfNgayHenTra, tfDatCoc, tfIdSach, tfNgayTra, tfTienPhat;
 	private boolean isupdate = false;
-	MyConnectDB myConn = new MyConnectDB();
+	MyConnectDB myConn;
 	
 	
 	
-	public QuanLyMuonTra() {
+	public QuanLyMuonTra(MyConnectDB connectDB) {
+		myConn = connectDB;
 		
 		setLayout(new BorderLayout());
 		add(createMainPanel());
@@ -78,8 +79,9 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel(title);
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
-		label.setForeground(Color.BLUE);;
+		label.setForeground(Color.YELLOW);;
 		panel.add(label);
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -88,6 +90,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBorder(new EmptyBorder(5, 50, 10, 50));
 		panel.add(new JScrollPane(table1 = createTable()));
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -96,6 +99,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBorder(new EmptyBorder(5, 50, 10, 30));
 		panel.add(new JScrollPane(table2 = createTable()));
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -107,7 +111,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 
 	private JPanel createBottomPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(new EmptyBorder(5, 0, 10, 0));
+		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(createTableBottomLeftPanel(), BorderLayout.CENTER);
 		panel.add(createButtonPanel(), BorderLayout.EAST);
 		
@@ -116,6 +120,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	
 	private JPanel createTableBottomLeftPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
+		panel.setBorder(new EmptyBorder(0, 0, 10, 15));
 		panel.add(createCTMTPanel());
 		panel.add(createInputPanel());
 		
@@ -132,6 +137,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	
 	private JPanel createInputPanel(){
 		JPanel panel = new JPanel(new GridLayout(1, 2));
+		panel.setBorder(new EmptyBorder(5, 0, 0, 0));
 		panel.add(createInputPanelL());
 		panel.add(createInputPanelR());
 		
@@ -189,7 +195,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(0, 50, 32, 30));
+		panel.setBorder(new EmptyBorder(0, 50, 27, 30));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1, 5, 5));
 		panelLeft.add(new JLabel("Ngày Mượn"));
 		panelLeft.add(new JLabel("Ngày Hẹn Trả"));
@@ -403,26 +409,42 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		return true;
 	}
 	
+	private boolean checkInt(String str) {
+		for(int i = 0; i < str.length(); i++) {
+			if(str.charAt(i) >= '0' && str.charAt(i) <= '9') return true;
+		}
+		return false;
+	}
+	
 	private MuonTra getMuonTra() {
 		String id = tfIdMT.getText().trim().toUpperCase();
 		String idDG = idDocGiaCB.getSelectedItem().toString().trim();
 		String idNV = idNhanVienCB.getSelectedItem().toString().trim();
 		String ngaymuon = tfNgayMuon.getText().trim();
 		String ngayhentra = tfNgayHenTra.getText().trim();
-		String tmp = tfDatCoc.getText().trim();
+		String tmp = tfDatCoc.getText().trim().toUpperCase();
 		if(id.equals("") ||idDG.equals("")||idNV.equals("")||
 				ngaymuon.equals("") || ngayhentra.equals("") || tmp.equals("")) return null;
+		if(!checkInt(tmp)) {
+			JOptionPane.showMessageDialog(null, "Tiền đặt cọc phải là số nguyên", "Warning", JOptionPane.WARNING_MESSAGE, null);
+			return null;
+		}
 		int  datcoc = Integer.parseInt(tmp);
 		MuonTra mt = new MuonTra(id, idDG, idNV, ngaymuon, ngayhentra, datcoc);
 		
 		return mt;
 	}
 	private ChiTietMuonTra getCTMT() {
-		String idMT = tfIdMT.getText().trim().toUpperCase(); //trim() dùng để loại bỏ khảng trắng ở hai đầu tf
+		String idMT = tfIdMT.getText().trim().toUpperCase();
 		String idS = tfIdSach.getText().trim();
 		String ngaytra  = tfNgayTra.getText().trim();
 		if(idMT.equals("") || idS.equals("")) return null;
+		String tmp = tfTienPhat.getText().trim().toUpperCase();
 		int tienphat;
+		if(!tmp.equals("") && !checkInt(tmp)) {
+			JOptionPane.showMessageDialog(null, "Tiền phạt phải là số nguyên", "Warning", JOptionPane.WARNING_MESSAGE, null);
+			return null;
+		}
 		if(tfTienPhat.getText().trim().equals("")) {
 			tienphat = 0;
 		}else
@@ -561,12 +583,15 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	   				exFile = path + ".docx";
 	   			}
 	   			System.out.println(exFile);
+	        }else {
+	        	System.out.println("\ncanceled.");
+	        	return;
 	        }
 			
 			XWPFDocument doc = new XWPFDocument();
 			try {
 				ef.printHeader(exFile, doc, "Phiếu Mượn Trả", "");
-				ef.printContentPhieuMT(exFile, doc, table1, row);
+				ef.printContentPhieuMT(exFile, doc, table1, row, myConn);
 				ef.printEnd(exFile, doc);
 			} catch (InvalidFormatException e1) {
 				// TODO Auto-generated catch block
@@ -595,6 +620,9 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	   				exFile = path + ".docx";
 	   			}
 	   			System.out.println(exFile);
+	        }else {
+	        	System.out.println("\ncanceled.");
+	        	return;
 	        }
 			
 			XWPFDocument doc = new XWPFDocument();

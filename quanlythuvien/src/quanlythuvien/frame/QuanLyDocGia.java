@@ -43,12 +43,13 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	private String[] thongKeVal = {"TenDG", "GioiTinh", "DiaChi"};
 	private JTextField tfIdDG, tfTenDG, tfNgaySinhDG, tfGioiTinhDG, tfEmail, tfSdtDG, tfDiaChi, tfTimKiem;
 	private boolean isupdate = false;
-	MyConnectDB myConn = new MyConnectDB();
-	private ExportFile ef = new ExportFile();
-	private ImportFile imp = new ImportFile();
+	MyConnectDB myConn;
+	private ExportFile ef; 
+	private ImportFile imp;
 	
 	
-	public QuanLyDocGia() {
+	public QuanLyDocGia(MyConnectDB connectDB) {
+		myConn = connectDB;
 		
 		setLayout(new BorderLayout());
 		add(createMainPanel());
@@ -75,8 +76,9 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel("Quản Lý Độc Giả");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
-		label.setForeground(Color.BLUE);;
+		label.setForeground(Color.YELLOW);
 		panel.add(label);
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -85,6 +87,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBorder(new EmptyBorder(5, 50, 10, 50));
 		panel.add(new JScrollPane(table = createTable()));
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -307,7 +310,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	}
 	
 	private DocGia getDocGia() {
-		String id = tfIdDG.getText().trim().toUpperCase(); //trim() dùng để loại bỏ khảng trắng ở hai đầu tf
+		String id = tfIdDG.getText().trim().toUpperCase(); 
 		String ten = tfTenDG.getText().trim();
 		String ns = tfNgaySinhDG.getText().trim();
 		String gt = tfGioiTinhDG.getText().trim();
@@ -411,21 +414,26 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 			return;
 		}
 		if(e.getSource() == btnThemFile) {
+			imp = new ImportFile();
 			int returnVal = fileDialog.showOpenDialog(this);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				String path = fileDialog.getCurrentDirectory().toString()
 				       	   + "\\" + fileDialog.getSelectedFile().getName();
 				try {
-					imp.importFileDG(path);
+					imp.importFileDG(path, myConn);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
+			}else {
+	        	System.out.println("\ncanceled.");
+	        	return;
+	        }
 			
 			return;
 		}
 		if(e.getSource() == btnXuatFile) {
+			ef = new ExportFile();
 			int returnVal = fileDialog.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 	   			String path = fileDialog.getCurrentDirectory().toString()
@@ -437,6 +445,9 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	   				exFile = path + ".docx";
 	   			}
 	   			System.out.println(exFile);
+	        }else {
+	        	System.out.println("\ncanceled.");
+	        	return;
 	        }
 			
 			XWPFDocument doc = new XWPFDocument();
@@ -474,6 +485,8 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
+			return;
 		}
 		if(e.getSource() == btnThongKe) {
 			loadVar();

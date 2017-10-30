@@ -31,25 +31,26 @@ import quanlythuvien.connect.ExportFile;
 import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.Sach;
-
+ 
 public class QuanLySach extends JPanel implements ActionListener {
 	private String titleCol[] = {"Mã Sách", "Tên Sách", "Nhà Xuất Bản", "Tên Tác Giả", "Năm Xuất Bản", "Giá Sách", "Thể Loại", "Ngôn Ngữ"};
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
-	private ExportFile ef = new ExportFile();
-	private ImportFile imp = new ImportFile();
+	private ExportFile ef;
+	private ImportFile imp;
 	private JButton btnThem, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnNhapFile, btnXuatFile;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idSach", "TenSach", "NhaXB", "TenTG", "NamXB"};
 	private String[] thongKeVal = {"NgonNgu", "TheLoai", "TenTG", "NhaXB", "NamXB"};
 	private JTextField tfIdS, tfTimKiem, tfTenS, tfNhaXB, tfTenTG, tfNamXB, tfGiaS, tfTheLoai, tfNgonNgu;
 	private boolean isupdate = false;
-	MyConnectDB myConn = new MyConnectDB();
-	 
+	MyConnectDB myConn;
+	  
 	
 	
-	public QuanLySach() {
+	public QuanLySach(MyConnectDB connectDB) {
+		myConn = connectDB;
 		
 		setLayout(new BorderLayout());
 		add(createMainPanel());
@@ -75,8 +76,9 @@ public class QuanLySach extends JPanel implements ActionListener {
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel("Quản Lý Sách");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
-		label.setForeground(Color.BLUE);
+		label.setForeground(Color.YELLOW);
 		panel.add(label);
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -85,6 +87,7 @@ public class QuanLySach extends JPanel implements ActionListener {
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBorder(new EmptyBorder(5, 50, 10, 50));
 		panel.add(new JScrollPane(table = createTable()));
+		panel.setBackground(new Color(0x009999));
 		
 		return panel;
 	}
@@ -312,15 +315,26 @@ public class QuanLySach extends JPanel implements ActionListener {
 		return true;
 	}
 	
+	private boolean checkInt(String str) {
+		for(int i = 0; i < str.length(); i++) {
+			if(str.charAt(i) >= '0' && str.charAt(i) <= '9') return true;
+		}
+		return false;
+	}
+	
 	private Sach getSach() {
-		String id = tfIdS.getText().trim().toUpperCase(); //trim() dùng để loại bỏ khảng trắng ở hai đầu tf
+		String id = tfIdS.getText().trim().toUpperCase();
 		String ten = tfTenS.getText().trim();
 		String nxb = tfNhaXB.getText().trim();
 		String tg = tfTenTG.getText().trim();
 		String namxb = tfNamXB.getText().trim();
 		String tl = tfTheLoai.getText().trim();
 		String nn = tfNgonNgu.getText().trim();
-		String tmp = tfGiaS.getText().trim();
+		String tmp = tfGiaS.getText().trim().toUpperCase();
+		if(!checkInt(tmp)) {
+			JOptionPane.showMessageDialog(null, "Giá sách phải là số nguyên", "Warning", JOptionPane.WARNING_MESSAGE, null);
+			return null;
+		}
 		if(id.equals("") || ten.equals("") || nxb.equals("") || tg.equals("") ||
 				nxb.equals("") || tl.equals("") || nn.equals("") || tmp.equals("")) return null;
 		int gia = Integer.parseInt(tmp);
@@ -425,20 +439,26 @@ public class QuanLySach extends JPanel implements ActionListener {
 			return;
 		}
 		if(e.getSource() == btnNhapFile) {
+			imp = new ImportFile();
 			int returnVal = fileDialog.showOpenDialog(this);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				String path = fileDialog.getCurrentDirectory().toString()
 						+ "\\" + fileDialog.getSelectedFile().getName();
 				System.out.println(path);
 				try {
-					imp.importFileBook(path);
+					imp.importFileBook(path, myConn);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			}
+			}else {
+	        	System.out.println("\ncanceled.");
+	        	return;
+	        }
+			
 			return;
 		}
 		if(e.getSource() == btnXuatFile) {
+			ef  = new ExportFile();
 			int returnVal = fileDialog.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 	   			String path = fileDialog.getCurrentDirectory().toString()
@@ -450,6 +470,9 @@ public class QuanLySach extends JPanel implements ActionListener {
 	   				exFile = path + ".docx";
 	   			}
 	   			System.out.println(exFile);
+	        }else {
+	        	System.out.println("\ncanceled.");
+	        	return;
 	        }
 			
 			XWPFDocument doc = new XWPFDocument();

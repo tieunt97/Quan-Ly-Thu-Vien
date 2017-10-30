@@ -19,9 +19,9 @@ import quanlythuvien.object.Sach;
 
 public class ImportFile {
 	
-	MyConnectDB conn = new MyConnectDB();
+//	MyConnectDB conn = new MyConnectDB();
 	
-	public void importFileBook(String pathFile) throws IOException{
+	public void importFileBook(String pathFile, MyConnectDB conn) throws IOException{
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
         
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -60,7 +60,7 @@ public class ImportFile {
         workbook.close();
         inputStream.close();
 	}
-	public void importFileDG(String pathFile) throws IOException{
+	public void importFileDG(String pathFile, MyConnectDB conn) throws IOException{
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
 		
 		Workbook workbook = new XSSFWorkbook(inputStream);
@@ -98,7 +98,7 @@ public class ImportFile {
 		workbook.close();
 		inputStream.close();
 	}
-	public void importFileNV(String pathFile) throws IOException{
+	public void importFileNV(String pathFile, MyConnectDB conn) throws IOException{
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
 		
 		Workbook workbook = new XSSFWorkbook(inputStream);

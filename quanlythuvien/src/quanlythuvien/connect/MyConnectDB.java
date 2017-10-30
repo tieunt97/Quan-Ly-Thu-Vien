@@ -30,8 +30,8 @@ public class MyConnectDB {
 		try {
 			Class.forName(className);// connect driver
 			conn = (Connection) DriverManager.getConnection(url, user, pwd);
-			System.out.println("Connect success.");
-			System.out.println("\nNguyễn Tài Tiêu - 20153752");
+			System.out.print("\nConnect success.");
+			System.out.print("\nNguyễn Tài Tiêu - 20153752");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -270,7 +270,7 @@ public class MyConnectDB {
 			
 			
 			if(ps.executeUpdate() > 0) {
-				System.out.println("insert success.");
+				System.out.println("\ninsert success.");
 				JOptionPane.showMessageDialog(null, "Thêm Thành Công");
 			}else 
 				System.out.println("insert error");
