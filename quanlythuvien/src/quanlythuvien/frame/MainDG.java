@@ -1,0 +1,61 @@
+package quanlythuvien.frame;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+
+import quanlythuvien.connect.MyConnectDB;
+
+public class MainDG extends JFrame{
+	private QuanLySach qlSach;
+	private DoiMatKhau doiMK;
+	private MyConnectDB myConn;
+	private String tenTK = "", loaiTK = "";
+	JTabbedPane tabbedPane;
+	
+	public MainDG(String tenTK, String loaiTK, MyConnectDB myConn) {
+		this.tenTK = tenTK;
+		this.loaiTK = loaiTK;
+		this.myConn = myConn;
+		
+		createGUI();
+		setDisplay();
+	}
+	
+	private void setDisplay() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1200, 720);
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+	
+	private void createGUI() {
+		add(tabbedPane = createTabbedPane());
+		tabbedPane.setVisible(true);
+	}
+	
+	private JTabbedPane createTabbedPane() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		qlSach = new QuanLySach(myConn);
+		qlSach.getInputPanelL().setVisible(false);
+		qlSach.getInputPanelR().setVisible(false);
+		qlSach.getBtnOtherPanel().setVisible(false);
+		qlSach.getThongKeCB().setVisible(false);
+		qlSach.getBtnThongKe().setVisible(false);
+		tabbedPane.addTab("Thông tin sách", new ImageIcon(this.getClass().getResource("/book.png")), qlSach);
+		doiMK = new DoiMatKhau(tenTK, loaiTK, myConn);
+		tabbedPane.addTab("Đổi mật khẩu & Đăng xuất", null, doiMK);
+		
+		return tabbedPane;
+	}
+
+	public DoiMatKhau getDoiMK() {
+		return doiMK;
+	}
+
+	public void setDoiMK(DoiMatKhau doiMK) {
+		this.doiMK = doiMK;
+	}
+	
+	
+}

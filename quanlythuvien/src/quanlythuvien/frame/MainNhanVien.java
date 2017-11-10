@@ -6,16 +6,18 @@ import javax.swing.JTabbedPane;
 
 import quanlythuvien.connect.MyConnectDB;
 
-public class Main extends JFrame{
-
-	private QuanLySach qlS;
+public class MainNhanVien extends JFrame{
+	private QuanLySach qlSach;
 	private QuanLyDocGia qlDG;
-	private QuanLyNhanVien qlNV;
 	private QuanLyMuonTra qlMT;
+	private DoiMatKhau doiMK;
+	private String tenTk = "", loaiTK = "";
 	private MyConnectDB myConn;
 	JTabbedPane tabbedPane;
 	
-	public Main(MyConnectDB myConn) {
+	public MainNhanVien(String tenTK, String loaiTK, MyConnectDB myConn) {
+		this.tenTk = tenTK;
+		this.loaiTK = loaiTK;
 		this.myConn = myConn;
 		
 		createGUI();
@@ -36,16 +38,25 @@ public class Main extends JFrame{
 	
 	private JTabbedPane createTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		qlS = new QuanLySach(myConn);
-		tabbedPane.addTab("Quản Lý Sách",  new ImageIcon(this.getClass().getResource("/book.png")), qlS);
+		qlSach = new QuanLySach(myConn);
+		tabbedPane.addTab("Quản Lý Sách",  new ImageIcon(this.getClass().getResource("/book.png")), qlSach);
 		qlDG = new QuanLyDocGia(myConn);
 		tabbedPane.addTab("Quản Lý Độc Giả", new ImageIcon(this.getClass().getResource("/per1.png")), qlDG);
-		qlNV = new QuanLyNhanVien(myConn);
-		tabbedPane.addTab("Quản Lý Nhân Viên", new ImageIcon(this.getClass().getResource("/per.png")), qlNV);
 		qlMT = new QuanLyMuonTra(myConn);
 		tabbedPane.addTab("Quản Lý Mượn Trả", new ImageIcon(this.getClass().getResource("/book1.png")), qlMT);
+		doiMK = new DoiMatKhau(tenTk, loaiTK, myConn);
+		tabbedPane.addTab("Đổi mật khẩu & Đăng xuất", null, doiMK);
 		
 		return tabbedPane;
 	}
+
+	public DoiMatKhau getDoiMK() {
+		return doiMK;
+	}
+
+	public void setDoiMK(DoiMatKhau doiMK) {
+		this.doiMK = doiMK;
+	}
+	
 	
 }

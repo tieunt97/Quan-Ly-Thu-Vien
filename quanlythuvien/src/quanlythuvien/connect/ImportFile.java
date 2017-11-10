@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,9 +21,8 @@ import quanlythuvien.object.Sach;
 
 public class ImportFile {
 	
-//	MyConnectDB conn = new MyConnectDB();
-	
 	public void importFileBook(String pathFile, MyConnectDB conn) throws IOException{
+		int count = 0, count1 = 0;
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
         
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -53,14 +54,18 @@ public class ImportFile {
             System.out.println("độ rộng: " + dataBook.size());
             Sach s = new Sach(dataBook.get(0).toUpperCase(), dataBook.get(1), dataBook.get(2), dataBook.get(3),
             		dataBook.get(4), Integer.parseInt(dataBook.get(5)), dataBook.get(6), dataBook.get(7));
-            conn.insert("Sach", s, null, null, null, null);
+            if(conn.insert("Sach", s, null, null, null, null)) count++;
+            else count1++;
             System.out.println();
         }
+        
+        JOptionPane.showMessageDialog(null, "Có " + count + " bản ghi thêm thành công\n" + "Có " + count1 + " bản ghi lỗi");
          
         workbook.close();
         inputStream.close();
 	}
 	public void importFileDG(String pathFile, MyConnectDB conn) throws IOException{
+		int count = 0, count1 = 0;
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
 		
 		Workbook workbook = new XSSFWorkbook(inputStream);
@@ -91,22 +96,28 @@ public class ImportFile {
 			}
 			System.out.println("độ rộng: " + dataDG.size());
 			DocGia dg = new DocGia(dataDG.get(0).toUpperCase(), dataDG.get(1), dataDG.get(2), dataDG.get(3), dataDG.get(4), dataDG.get(5), dataDG.get(6));
-			conn.insert("DocGia", null, dg, null, null, null);
+			if(conn.insert("DocGia", null, dg, null, null, null)) count++;
+			else count1++;
 			System.out.println();
 		}
+		
+		JOptionPane.showMessageDialog(null, "Có " + count + " bản ghi thêm thành công\n" + "Có " + count1 + " bản ghi lỗi");
 		
 		workbook.close();
 		inputStream.close();
 	}
 	public void importFileNV(String pathFile, MyConnectDB conn) throws IOException{
+		int count = 0, count1 = 0;
 		FileInputStream inputStream = new FileInputStream(new File(pathFile));
 		
 		Workbook workbook = new XSSFWorkbook(inputStream);
 		Sheet firstSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = firstSheet.iterator();
+		Row nextRow;
+		if(iterator.hasNext()) nextRow = iterator.next();
 		
 		while (iterator.hasNext()) {
-			Row nextRow = iterator.next();
+			nextRow = iterator.next();
 			Iterator<Cell> cellIterator = nextRow.cellIterator();
 			ArrayList<String> dataNV  = new ArrayList<String>();
 			
@@ -129,9 +140,11 @@ public class ImportFile {
 			}
 			System.out.println("độ rộng: " + dataNV.size());
 			NhanVien nv = new NhanVien(dataNV.get(0), dataNV.get(1), dataNV.get(2), dataNV.get(3), dataNV.get(4), dataNV.get(5));
-			conn.insert("NhanVien", null, null, nv, null, null);
+			if(conn.insert("NhanVien", null, null, nv, null, null)) count++;
+			else count1++;
 			System.out.println();
 		}
+		JOptionPane.showMessageDialog(null, "Có " + count + " bản ghi thêm thành công\n" + "Có " + count1 + " bản ghi lỗi");
 		
 		workbook.close();
 		inputStream.close();

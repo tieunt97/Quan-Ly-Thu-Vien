@@ -15,6 +15,7 @@ import quanlythuvien.object.DocGia;
 import quanlythuvien.object.MuonTra;
 import quanlythuvien.object.NhanVien;
 import quanlythuvien.object.Sach;
+import quanlythuvien.object.TaiKhoan;
 
 public class MyConnectDB {
 	private final String className = "com.mysql.jdbc.Driver";
@@ -146,7 +147,7 @@ public class MyConnectDB {
 			}
 		} catch (SQLException e) {
 			System.out.println("lỗi delete " + e);
-			JOptionPane.showMessageDialog(null, "Xóa lỗi", "Error delete", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null, "Xóa lỗi", "Error delete", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		return false;
@@ -188,9 +189,9 @@ public class MyConnectDB {
 				ps.setString(1, id);
 				rs = ps.executeQuery();
 				while(rs.next()) {
-				String id1 = rs.getString(1);
-				deleteID("ChiTietMuonTra", "idMuonTra", id1);
-				deleteID("MuonTra", "idMuonTra", id1);
+					String id1 = rs.getString(1);
+					deleteID("ChiTietMuonTra", "idMuonTra", id1);
+					deleteID("MuonTra", "idMuonTra", id1);
 				}
 				deleteID(table, idT, id);
 				return true;
@@ -203,7 +204,7 @@ public class MyConnectDB {
 		return false;
 	}
 	
-	public void insert(String table, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
+	public boolean insert(String table, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
 		String qSql = "";
 		if(table.equals("Sach")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -271,16 +272,19 @@ public class MyConnectDB {
 			
 			if(ps.executeUpdate() > 0) {
 				System.out.println("\ninsert success.");
-				JOptionPane.showMessageDialog(null, "Thêm Thành Công");
+				return true;
+//				JOptionPane.showMessageDialog(null, "Thêm Thành Công");
 			}else 
 				System.out.println("insert error");
+				return false;
 		} catch (SQLException e) {
 			System.out.println("insert error" + e);
-			JOptionPane.showMessageDialog(null, "Trùng mã hoặc có trường dữ liệu trống", "Error insert", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null, "Trùng mã hoặc có trường dữ liệu trống", "Error insert", JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
 	}
 	
-	public void update(String id, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
+	public boolean update(String id, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
 		String qSql = "";
 		if(s != null) {
 			qSql = "update Sach set TenSach = ?, NhaXB = ?, TenTG = ?, NamXB = ?, GiaSach = ?, TheLoai = ?, NgonNgu = ? where idSach = ?";
@@ -350,62 +354,58 @@ public class MyConnectDB {
 			
 			if(ps.executeUpdate() > 0) {
 				System.out.println("\nupdate success.");
-			}else 
+				return true;
+			}else {
 				System.out.println("\nupdate error");
+				return false;
+			}
 		} catch (SQLException e) {
 			System.out.println("update error" + e);
+			return false;
 		}
 	}
 	
-	public void showData(ResultSet rs, String table) {
+	public void insertTK(TaiKhoan tk) {
+		String qSql = "insert into TaiKhoan values(?, ?, ?)";
+		PreparedStatement ps = null;
 		try {
-			while(rs.next()) {
-									//*printf
-				if(table.equals("Sach")) {
-					System.out.printf("%-10s %-27s %-15s %-27s %-11s %-10d %-15s %-15s\n", rs.getString(1), 
-						rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8));
-				}	
-				if(table.equals("DocGia")) {
-					System.out.printf("%-10s %-27s %-10s %-10s %-27s %-18s %-27s", rs.getString(1),
-							rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
-				}
-				if(table.equals("NhanVien")) {
-					System.out.printf("%-10s %-27s %-10s %-10s %-27s %-18s", rs.getString(1),
-							rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
-				}
-				if(table.equals("MuonTra")) {
-					System.out.printf("%-10s %-10s %-10s %-10s %-10s %-10d", rs.getString(1),
-							rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6));
-				}
-				if(table.equals("ChiTietMuonTra")) {
-					System.out.printf("%-10s %-10s %-10s %-10d", rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-				}
-				
+			ps = (PreparedStatement) conn.prepareStatement(qSql);
+			ps.setString(1, tk.getTenTK());
+			ps.setString(2, tk.getMatKhau());
+			ps.setString(3, tk.getLoaiTK());
+			
+			if(ps.executeUpdate() > 0) {
+				System.out.print("\ninsert TK success.");
+			}else {
+				System.out.println("insert TK error.");
 			}
 		} catch (SQLException e) {
+			System.out.print("\ninsert TK error.");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	//main
-	public static void main(String[] args) {
-		MyConnectDB myConn = new MyConnectDB();
-//		myConn.insert("Sach", new Sach("S0003", "Lập trình hướng đối tượng", "BKHN", 
-//				"Trịnh Thành Trung", "2017-01-18",75000, "lập trình", "Tiếng Việt"), null, null, null, null);
-//		//myConn.deleteID("Sach", "idSach", "S0003");
-//		myConn.showData(myConn.getDataID("Sach", "idSach", "All", ""), "Sach");
-////		myConn.showData(myConn.getDataID("Sach", "idSach", "S0002"), "Sach");
-//		System.out.println("Dữ liệu độc giả");
-////		myConn.insert("DocGia", null, new DocGia("DG001", "Nguyễn Tài Tiêu", "1997-10-27", "Nam", "abc@gmail.com", "123456789", "Hà Nội"), null, null, null);
-//		myConn.update("DG001", null, new DocGia("DG001", "Nguyễn Tài Tiêu", "27-10-1997", "Nam", "tieunt@gmail.com", "123456789", "Hà Nội"), null, null, null);
-//		myConn.showData(myConn.getDataID("DocGia", "idDocGia", "All", ""), "DocGia");
-//		System.out.println("\nDữ liệu nhân viên");
-////		myConn.insert("NhanVien", null, null, new NhanVien("NV001", "Bùi Thị Diệu", "1997-01-18", "Nữ", "Hà Nội", "18271997"), null, null);
-//		myConn.showData(myConn.getDataID("NhanVien", "idNhanVien", "All", ""), "NhanVien");
-//		System.out.println("\n Dữ liệu mượn trả");
-//		myConn.insert("MuonTra", null, null, null, new MuonTra("MT001", "DG001", "NV001", "2017-10-17", "2017-10-27", 50000), null);
-//		myConn.showData(myConn.getDataID("MuonTra", "idMuonTra", "All", ""), "MuonTra");
-//		myConn.insert("Sach", new Sach("LT001", "Lập trình Java", "NXB Thông tin và truyền thông", "Herbert Schildt", "2015-11-18", 125000, "Lập trình", "Tiếng Việt"), null, null, null, null);
-		myConn.deleteCTMT("MT001", "LT001");
+	public boolean updateTK(String idTaiKhoan, TaiKhoan tk) {
+		String qSql = "update TaiKhoan set passWord = ? where idTaiKhoan = ?";
+		PreparedStatement ps = null;
+		try {
+			ps = (PreparedStatement) conn.prepareStatement(qSql);
+			ps.setString(1, tk.getMatKhau());
+			ps.setString(2, idTaiKhoan);
+			
+			if(ps.executeUpdate() > 0) {
+				System.out.println("update TK success.");
+				return true;
+			}else {
+				System.out.println("update TK error.");
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("update TK error --- sql.");
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -33,21 +33,20 @@ import quanlythuvien.object.ChiTietMuonTra;
 import quanlythuvien.object.MuonTra;
 
 public class QuanLyMuonTra extends JPanel implements ActionListener{
-	private String titleCol[] = {"Mã Mượn Trả", "Mã Độc Giả", "Mã Nhân Viên", "Ngày Mượn", "Ngày Hẹn Trả", "Đặt Cọc"};
-	private String titleCol1[] = {"Mã Mượn Trả", "Mã Sách", "Ngày Trả", "Tiền Phạt"};
-	private String itemsTable[] = {"Mượn Trả", "Chi Tiết Mượn Trả"};
+	private String titleCol[] = {"Mã mượn trả", "Mã độc giả", "Mã nhân viên", "Ngày mượn", "Ngày hẹn trả", "Đặt cọc"};
+	private String titleCol1[] = {"Mã mượn trả", "Mã sách", "Ngày trả", "Tiền phạt"};
+	private String itemsTable[] = {"Mượn trả", "Chi tiết mượn trả"};
 	private JTable table1, table2;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
 	private ExportFile ef = new ExportFile();
-	private JButton btnThem, btnXuatFile, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnInPhieu;
+	private JButton btnThem, btnXuatFile, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnInPhieu, btnCapNhat;
 	private JComboBox timKiemCB, thongKeCB, idNhanVienCB, idDocGiaCB, tableCB;
 	private String[] timKiemVal = {"All", "idMuonTra", "idDocGia", "idNhanVien", "NgayMuon", "NgayTra"};
 	private String[] thongKeVal = {"idDocGia", "idNhanVien", "NgayMuon"};
 	private JTextField tfIdMT, tfTimKiem, tfNgayMuon, tfNgayHenTra, tfDatCoc, tfIdSach, tfNgayTra, tfTienPhat;
-	private boolean isupdate = false;
+	private JLabel labTenDG = new JLabel(""), labTenNV = new JLabel("");
 	MyConnectDB myConn;
-	
 	
 	
 	public QuanLyMuonTra(MyConnectDB connectDB) {
@@ -60,7 +59,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 
 	private JPanel createMainPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(createTitlePanel("Quản Lý Mượn Trả"), BorderLayout.PAGE_START);
+		panel.add(createTitlePanel("Quản lý mượn trả"), BorderLayout.PAGE_START);
 		panel.add(createGridPanel(), BorderLayout.CENTER);
 		
 		return panel;
@@ -129,15 +128,15 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	
 	private JPanel createCTMTPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(createTitlePanel("Chi Tiết Mượn Trả"), BorderLayout.PAGE_START);
+		panel.add(createTitlePanel("Chi tiết mượn trả"), BorderLayout.PAGE_START);
 		panel.add(createTable2Panel());
 		
 		return panel;
 	}
 	
 	private JPanel createInputPanel(){
-		JPanel panel = new JPanel(new GridLayout(1, 2));
-		panel.setBorder(new EmptyBorder(5, 0, 0, 0));
+		JPanel panel = new JPanel(new GridLayout(1, 2, 20, 20));
+		panel.setBorder(new EmptyBorder(5, 50, 0, 30));
 		panel.add(createInputPanelL());
 		panel.add(createInputPanelR());
 		
@@ -167,23 +166,23 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 			}
 		}
 		
+		cb.addActionListener(this);
 		return cb;
 	}
 	
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(0, 50, 0, 30));
 		JPanel panelLeft = new JPanel(new GridLayout(5, 1, 5, 5));
-		panelLeft.add(new JLabel("Mã Mượn Trả"));
-		panelLeft.add(new JLabel("Mã Độc Giả"));
-		panelLeft.add(new JLabel("Mã Nhân Viên"));
-		panelLeft.add(new JLabel("Mã Sách"));
-		panelLeft.add(new JLabel("Ngày Trả"));
+		panelLeft.add(new JLabel("Mã mượn trả"));
+		panelLeft.add(new JLabel("Mã độc giả"));
+		panelLeft.add(new JLabel("Mã nhân viên"));
+		panelLeft.add(new JLabel("Mã sách"));
+		panelLeft.add(new JLabel("Ngày trả"));
 		
 		JPanel panelRight = new JPanel(new GridLayout(5, 1, 5, 5));
 		panelRight.add(tfIdMT = new JTextField());
-		panelRight.add(idDocGiaCB = createCBBoxID("DocGia"));
-		panelRight.add(idNhanVienCB = createCBBoxID("NhanVien"));
+		panelRight.add(createPanelLabel("DocGia"));
+		panelRight.add(createPanelLabel("NhanVien"));
 		panelRight.add(tfIdSach = new JTextField());
 		panelRight.add(tfNgayTra = new JTextField());
 		
@@ -192,21 +191,40 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		
 		return panel;
 	}
+	
+	private JPanel createPanelLabel(String table) {
+		JPanel panel = new JPanel(new BorderLayout(5, 5));
+		if(table.equals("DocGia")) {
+			panel.add(idDocGiaCB = createCBBoxID("DocGia"), BorderLayout.WEST);
+			panel.add(labTenDG = new JLabel(""), BorderLayout.CENTER);
+		}else {
+			panel.add(idNhanVienCB = createCBBoxID("NhanVien"), BorderLayout.WEST);
+			panel.add(labTenNV = new JLabel(""), BorderLayout.CENTER);
+		}
+		
+		return panel;
+	}
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(0, 50, 27, 30));
-		JPanel panelLeft = new JPanel(new GridLayout(4, 1, 5, 5));
-		panelLeft.add(new JLabel("Ngày Mượn"));
-		panelLeft.add(new JLabel("Ngày Hẹn Trả"));
-		panelLeft.add(new JLabel("Đặt Cọc"));
-		panelLeft.add(new JLabel("Tiền Phạt"));
+		JPanel panelLeft = new JPanel(new GridLayout(5, 1, 5, 5));
+		panelLeft.add(new JLabel("Ngày mượn"));
+		panelLeft.add(new JLabel("Ngày hẹn trả"));
+		panelLeft.add(new JLabel("Đặt cọc"));
+		panelLeft.add(new JLabel("Tiền phạt"));
+		panelLeft.add(new JLabel(""));
 		
-		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(5, 1, 5, 5));
 		panelRight.add(tfNgayMuon = new JTextField());
 		panelRight.add(tfNgayHenTra = new JTextField());
 		panelRight.add(tfDatCoc = new JTextField());
 		panelRight.add(tfTienPhat = new JTextField());
+		JPanel panelBut = new JPanel(new GridLayout());
+		panelBut.setBorder(new EmptyBorder(0, 120, 0, 0));
+		panelBut.add(btnCapNhat = createButton("Cập nhật"));
+		btnCapNhat.setVisible(false);
+		panelRight.add(panelBut);
+
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -270,11 +288,11 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
-		panel.add(btnInPhieu = createButton("In Phiếu"));
-//		btnInPhieu.setToolTipText("In Phiếu");
-		panel.add(btnXuatFile = createButton("Xuất File"));
+		panel.add(btnInPhieu = createButton("In phiếu"));
+		btnInPhieu.setToolTipText("In phiếu");
+		panel.add(btnXuatFile = createButton("Xuất file"));
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
-//		btnXuatFile.setToolTipText("Xuất File");
+		btnXuatFile.setToolTipText("Xuất file");
 		
 		return panel;
 	}
@@ -284,12 +302,12 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		panel.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panel.add(btnTimKiem = createButton(""));
 		btnTimKiem.setIcon(new ImageIcon(this.getClass().getResource("/search.png")));
-		btnTimKiem.setToolTipText("Tìm Kiếm");
+		btnTimKiem.setToolTipText("Tìm kiếm");
 		timKiemCB = new JComboBox(timKiemVal);
 		panel.add(timKiemCB);
 		panel.add(btnThongKe = createButton(""));
 		btnThongKe.setIcon(new ImageIcon(this.getClass().getResource("/tk.png")));
-		btnThongKe.setToolTipText("Thống Kê");
+		btnThongKe.setToolTipText("Thống kê");
 		thongKeCB = new JComboBox(thongKeVal);
 		panel.add(thongKeCB);
 		
@@ -387,27 +405,6 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		table1.setModel(model);
 		cancel();
 	}
-	private boolean setDisplayInput(boolean update) {
-		if(update && table1.getSelectedRow() < 0 && table2.getSelectedRow() < 0 || (table1.getSelectedRow() >= 0 && table2.getSelectedRow() >= 0)) 
-			return false;
-		else if(update && table1.getSelectedRow() >= 0) {
-			int row = table1.getSelectedRow();
-			tfIdMT.setText((String) table1.getValueAt(row, 0));
-			idDocGiaCB.setSelectedItem(table1.getValueAt(row, 1));
-			idNhanVienCB.setSelectedItem(table1.getValueAt(row, 2));
-			tfNgayMuon.setText((String) table1.getValueAt(row, 3));
-			tfNgayHenTra.setText((String) table1.getValueAt(row, 4));
-			tfDatCoc.setText((String) table1.getValueAt(row, 5));
-		}else if(update && table2.getSelectedRow() >= 0) {
-			int row = table2.getSelectedRow();
-			tfIdMT.setText((String) table2.getValueAt(row, 0));
-			tfIdSach.setText((String) table2.getValueAt(row, 1));
-			tfNgayTra.setText((String) table2.getValueAt(row, 2));
-			tfTienPhat.setText((String) table2.getValueAt(row, 3));
-		}
-		
-		return true;
-	}
 	
 	private boolean checkInt(String str) {
 		for(int i = 0; i < str.length(); i++) {
@@ -453,48 +450,73 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		
 		return ctmt;
 	}
-	private void addOrUpdate() {
-		MuonTra mt = getMuonTra();
+	
+	private void add() {
 		ChiTietMuonTra ctmt = getCTMT();
-		if(mt != null) {
-			if(isupdate) {
-				myConn.update(mt.getIdMuonTra(), null, null, null, mt, null);
-				loadData("All", "");
-				isupdate = false;
-			}else {
-				myConn.insert("MuonTra", null, null, null, mt, null);
-				myConn.insert("ChiTietMuonTra", null, null, null, null, ctmt);
-				loadData("All", "");
-			}
-			setDisplayInput(false);
+		MuonTra mt = getMuonTra();
+		if(mt != null && tableCB.getSelectedItem().equals("Mượn trả")) {
+			boolean ck = myConn.insert("MuonTra", null, null, null, mt, null);
+			if(ck) JOptionPane.showMessageDialog(null, "Thêm mượn trả thành công");
+			else JOptionPane.showMessageDialog(null, "Có lỗi xảy ra", "Error insert", JOptionPane.ERROR_MESSAGE);
+		}else if(ctmt != null && tableCB.getSelectedItem().equals("Chi tiết mượn trả")) {
+			boolean ck = myConn.insert("ChiTietMuonTra", null, null, null, null, ctmt);
+			if(ck) JOptionPane.showMessageDialog(null, "Thêm chi tiết mượn trả thành công");
+			else JOptionPane.showMessageDialog(null, "Có lỗi xảy ra", "Error insert", JOptionPane.ERROR_MESSAGE);
 		}else {
-			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
+			if(mt != null && tableCB.getSelectedItem().equals("Chi tiết mượn trả")) {
+				JOptionPane.showMessageDialog(null, "Cần chọn đúng bảng để thêm", "Warning", JOptionPane.WARNING_MESSAGE);
+			}else if(ctmt != null && tableCB.getSelectedItem().equals("Mượn trả")){
+				JOptionPane.showMessageDialog(null, "Cần chọn đúng bảng để thêm", "Warning", JOptionPane.WARNING_MESSAGE);
+			}else {
+				JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
+			}
 		}
+		loadData("All", "");
 	}
 	
-	private void addOrUpdate1() {
-		ChiTietMuonTra ctmt = getCTMT();
-		if(ctmt != null) {
-			if(isupdate) {
-				myConn.update(ctmt.getIdMuonTra(), null, null, null, null, ctmt);
-				isupdate = false;
-			}else {
-				myConn.insert("ChiTietMuonTra", null, null, null, null, ctmt);
-			}
-			loadData("All", "");
-			setDisplayInput(false);
-		}else {
-			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
+	private boolean setUpdate() {
+		if(table1.getSelectedRow() < 0 && table2.getSelectedRow() < 0 || (table1.getSelectedRow() >= 0 && table2.getSelectedRow() >= 0)) {
+			JOptionPane.showMessageDialog(null, "Cần chọn một hàng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
+		else if(table1.getSelectedRow() >= 0) {
+			int row = table1.getSelectedRow();
+			tfIdMT.setText((String) table1.getValueAt(row, 0));
+			tfIdMT.setEnabled(false);
+			idDocGiaCB.setSelectedItem(table1.getValueAt(row, 1));
+			idNhanVienCB.setSelectedItem(table1.getValueAt(row, 2));
+			tfNgayMuon.setText((String) table1.getValueAt(row, 3));
+			tfNgayHenTra.setText((String) table1.getValueAt(row, 4));
+			tfDatCoc.setText((String) table1.getValueAt(row, 5));
+		}else if(table2.getSelectedRow() >= 0) {
+			int row = table2.getSelectedRow();
+			tfIdMT.setText((String) table2.getValueAt(row, 0));
+			tfIdMT.setEnabled(false);
+			tfIdSach.setText((String) table2.getValueAt(row, 1));
+			tfIdSach.setEnabled(false);
+			tfNgayTra.setText((String) table2.getValueAt(row, 2));
+			tfTienPhat.setText((String) table2.getValueAt(row, 3));
+		}
+		
+		btnCapNhat.setVisible(true);
+		return true;
 	}
 	
 	private void update() {
-		if(setDisplayInput(true)) {
-			isupdate = true;
+		MuonTra mt = getMuonTra();
+		ChiTietMuonTra ctmt = getCTMT();
+		boolean ck = false;
+		if(setUpdate()) {
+			if(mt != null) {
+				ck = myConn.update(mt.getIdMuonTra(), null, null, null, mt, null);
+			}else if(ctmt != null) {
+				ck = myConn.update(ctmt.getIdMuonTra(), null, null, null, null, ctmt);
+			}
+			if(ck) JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+			else JOptionPane.showMessageDialog(null, "Có lỗi xảy ra", "Error update", JOptionPane.ERROR_MESSAGE);
+			loadData("All", "");
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
-		}
+		cancel();
 	}
 	
 	private void delete() {
@@ -520,30 +542,59 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 	
 	private void cancel() {
 		tfIdMT.setText("");
-		idDocGiaCB.setSelectedIndex(0);;
+		tfIdMT.setEnabled(true);
+		idDocGiaCB.setSelectedIndex(0);
 		idNhanVienCB.setSelectedIndex(0);
+		labTenNV.setText("");
+		labTenDG.setText("");
 		tfNgayMuon.setText("");
 		tfNgayHenTra.setText("");
 		tfDatCoc.setText("");
 		tfIdSach.setText("");
+		tfIdSach.setEnabled(true);
 		tfNgayTra.setText("");
 		tfTienPhat.setText("");
 		tfTimKiem.setText("");
 		tableCB.setSelectedIndex(0);
-		setDisplayInput(false);
+		btnCapNhat.setVisible(false);
+	}
+	
+	private void changeLabel(String name, int choose) {
+		if(choose == 1) {
+			ResultSet rs = myConn.getNames("DocGia", "tenDG", "idDocGia", name);
+			try {
+				while(rs.next()) {
+					labTenDG.setText(rs.getString(1));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			ResultSet rs = myConn.getNames("NhanVien", "tenNV", "idNhanVien", name);
+			try {
+				while(rs.next()) {
+					labTenNV.setText(rs.getString(1));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnThem) {
-			if(tableCB.getSelectedItem().toString().equalsIgnoreCase("Mượn Trả")) {
-				addOrUpdate();
-			}else
-				addOrUpdate1();
+			add();
 			return;
 		}
 		if(e.getSource() == btnSua) {
-			
+			setUpdate();
+			return;
+		}
+		if(e.getSource() == btnCapNhat) {
 			update();
 			return;
 		}
@@ -563,6 +614,14 @@ public class QuanLyMuonTra extends JPanel implements ActionListener{
 		}
 		if(e.getSource() == btnThongKe) {
 			loadVar();
+			return;
+		}
+		if(e.getSource() == idDocGiaCB) {
+			changeLabel(idDocGiaCB.getSelectedItem().toString(), 1);
+			return;
+		}
+		if(e.getSource() == idNhanVienCB) {
+			changeLabel(idNhanVienCB.getSelectedItem().toString(), 0);
 			return;
 		}
 		if(e.getSource() == btnInPhieu) {

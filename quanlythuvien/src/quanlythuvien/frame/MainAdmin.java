@@ -6,16 +6,13 @@ import javax.swing.JTabbedPane;
 
 import quanlythuvien.connect.MyConnectDB;
 
-public class Main extends JFrame{
-
-	private QuanLySach qlS;
-	private QuanLyDocGia qlDG;
+public class MainAdmin extends JFrame {
 	private QuanLyNhanVien qlNV;
-	private QuanLyMuonTra qlMT;
+	private ThemTKDocGia qlTK;
 	private MyConnectDB myConn;
 	JTabbedPane tabbedPane;
 	
-	public Main(MyConnectDB myConn) {
+	public MainAdmin(MyConnectDB myConn) {
 		this.myConn = myConn;
 		
 		createGUI();
@@ -36,14 +33,10 @@ public class Main extends JFrame{
 	
 	private JTabbedPane createTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		qlS = new QuanLySach(myConn);
-		tabbedPane.addTab("Quản Lý Sách",  new ImageIcon(this.getClass().getResource("/book.png")), qlS);
-		qlDG = new QuanLyDocGia(myConn);
-		tabbedPane.addTab("Quản Lý Độc Giả", new ImageIcon(this.getClass().getResource("/per1.png")), qlDG);
 		qlNV = new QuanLyNhanVien(myConn);
 		tabbedPane.addTab("Quản Lý Nhân Viên", new ImageIcon(this.getClass().getResource("/per.png")), qlNV);
-		qlMT = new QuanLyMuonTra(myConn);
-		tabbedPane.addTab("Quản Lý Mượn Trả", new ImageIcon(this.getClass().getResource("/book1.png")), qlMT);
+		qlTK = new ThemTKDocGia(myConn);
+		tabbedPane.addTab("Quản lý tài khoản", null, qlTK);
 		
 		return tabbedPane;
 	}

@@ -31,24 +31,23 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import quanlythuvien.connect.ExportFile;
 import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
+import quanlythuvien.object.DocGia;
 import quanlythuvien.object.NhanVien;
 
 public class QuanLyNhanVien extends JPanel implements ActionListener {
-	private String titleCol[] = {"Mã NV", "Họ Tên", "Ngày Sinh", "Giới Tính", "Địa Chỉ", "Số ĐT"};
+	private String titleCol[] = {"Mã nhân viên", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "Số điện thoại"};
 	private JTable table;
 	final JFileChooser fileDialog = new JFileChooser();
 	private ExportFile ef;
 	private ImportFile imp;
 	private String exFile;
-	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe, btnThemFile;
+	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe, btnThemFile, btnCapNhat;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idNhanVien", "TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
 	private String[] thongKeVal = {"TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
 	private JTextField tfIdNV, tfTimKiem, tfTenNV, tfNgaySinhNV, tfGioiTinhNV, tfDiaChiNV, tfSdtNV;
-	private boolean isupdate = false;
 	MyConnectDB myConn;
 	
-	 
 	
 	public QuanLyNhanVien(MyConnectDB connect) {
 		myConn = connect;
@@ -77,7 +76,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 
 	private JPanel createTitlePanel() {
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel("Quản Lý Nhân Viên");
+		JLabel label = new JLabel("Quản lý nhân viên");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
 		label.setForeground(Color.YELLOW);;
 		panel.add(label);
@@ -111,16 +110,18 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 180, 20));
-		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
-		panelLeft.add(new JLabel("Mã NV"));
-		panelLeft.add(new JLabel("Giới Tính"));
-		panelLeft.add(new JLabel("Ngày Sinh"));
+		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
+		panelLeft.add(new JLabel("Mã nhân viên"));
+		panelLeft.add(new JLabel("Giới tính"));
+		panelLeft.add(new JLabel("Ngày sinh"));
+		panelLeft.add(new JLabel(""));
 		
-		JPanel panelRight = new JPanel(new GridLayout(3, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
 		panelRight.add(tfIdNV = new JTextField());
 		panelRight.add(tfGioiTinhNV = new JTextField());
 		panelRight.add(tfNgaySinhNV = new JTextField());
+		panelRight.add(new JLabel(""));
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -130,16 +131,22 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 180, 20));
-		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
-		panelLeft.add(new JLabel("Họ Tên"));
-		panelLeft.add(new JLabel("Địa Chỉ"));
-		panelLeft.add(new JLabel("Số ĐT"));
+		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
+		panelLeft.add(new JLabel("Họ tên"));
+		panelLeft.add(new JLabel("Địa chỉ"));
+		panelLeft.add(new JLabel("Số điện thoại"));
+		panelLeft.add(new JLabel(""));
 		
-		JPanel panelRight = new JPanel(new GridLayout(3, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
 		panelRight.add(tfTenNV = new JTextField());
 		panelRight.add(tfDiaChiNV = new JTextField());
 		panelRight.add(tfSdtNV = new JTextField());
+		JPanel panelBut = new JPanel(new GridLayout());
+		panelBut.setBorder(new EmptyBorder(0, 120, 0, 0));
+		panelBut.add(btnCapNhat = createButton("Cập nhật"));
+		btnCapNhat.setVisible(false);
+		panelRight.add(panelBut);
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -166,7 +173,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	
 	private JPanel createtfTKTKPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1, 10, 15));
-		panel.setBorder(new EmptyBorder(0, 5, 24, 0));													/////
+		panel.setBorder(new EmptyBorder(0, 5, 24, 0));													
 		tfTimKiem = new JTextField();
 		panel.add(tfTimKiem);
 		
@@ -200,9 +207,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
-		panel.add(btnThemFile = createButton("Nhập File"));
-		panel.add(btnXuatFile = createButton("Xuất File"));
-		btnXuatFile.setToolTipText("Xuất File");
+		panel.add(btnThemFile = createButton("Nhập file"));
+		panel.add(btnXuatFile = createButton("Xuất file"));
+		btnXuatFile.setToolTipText("Xuất file");
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
 		return panel;
 	}
@@ -212,12 +219,12 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		panel.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panel.add(btnTimKiem = createButton(""));
 		btnTimKiem.setIcon(new ImageIcon(this.getClass().getResource("/search.png")));
-		btnTimKiem.setToolTipText("Tìm Kiếm");
+		btnTimKiem.setToolTipText("Tìm kiếm");
 		timKiemCB = new JComboBox(timKiemVal);
 		panel.add(timKiemCB);
 		panel.add(btnThongKe = createButton(""));
 		btnThongKe.setIcon(new ImageIcon(this.getClass().getResource("/tk.png")));
-		btnThongKe.setToolTipText("Thống Kê");
+		btnThongKe.setToolTipText("Thống kê");
 		thongKeCB = new JComboBox(thongKeVal);
 		panel.add(thongKeCB);
 		return panel;
@@ -253,10 +260,10 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	private String[] getTK() {
 		String[] arr = new String[2];
 		arr[0] = thongKeCB.getSelectedItem().toString().trim();
-		if(arr[0].equals("TenNV")) arr[1] = "Tên Nhân Viên";
-		if(arr[0].equals("GioiTinh")) arr[1] = "Giới Tính";
-		if(arr[0].equals("DiaChi")) arr[1] = "Địa Chỉ";
-		if(arr[0].equals("NgaySinh")) arr[1] = "Ngày Sinh";
+		if(arr[0].equals("TenNV")) arr[1] = "Tên nhân viên";
+		if(arr[0].equals("GioiTinh")) arr[1] = "Giới tính";
+		if(arr[0].equals("DiaChi")) arr[1] = "Địa chỉ";
+		if(arr[0].equals("NgaySinh")) arr[1] = "Ngày sinh";
 
 		return arr;
 	}
@@ -292,21 +299,6 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		cancel();
 	}
 	
-	private boolean setDisplayInput(boolean update) {
-		if(update && table.getSelectedRow() < 0) {
-			return false;
-		}else if(update) {
-			int row = table.getSelectedRow();
-			tfIdNV.setText((String) table.getValueAt(row, 0));
-			tfTenNV.setText((String) table.getValueAt(row, 1));
-			tfNgaySinhNV.setText((String) table.getValueAt(row, 2));
-			tfGioiTinhNV.setText((String) table.getValueAt(row, 3));
-			tfDiaChiNV.setText((String) table.getValueAt(row, 4));
-			tfSdtNV.setText((String) table.getValueAt(row, 5));
-		}
-		return true;
-	}
-	
 	private NhanVien getNhanVien() {
 		String id = tfIdNV.getText().trim().toUpperCase(); 
 		String ten = tfTenNV.getText().trim();
@@ -322,38 +314,58 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		return nv;
 	}
 	
-	private void addOrUpdate() {
+	private void add() {
 		NhanVien nv = getNhanVien();
 		if(nv != null) {
-			if(isupdate) {
-				myConn.update(nv.getIdNhanVien(), null, null, nv, null, null);
+			boolean ck = myConn.insert("NhanVien", null, null, nv, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Thêm thành công");
 				loadData("All", "");
-				isupdate = false;
 			}else {
-				myConn.insert("NhanVien", null, null, nv, null, null);
-				loadData("All", "");
+				JOptionPane.showMessageDialog(null, "Có lỗi xảy ra.");
 			}
-			cancel();
-			setDisplayInput(false);
 		}else {
 			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
+	private boolean setUpdate() {
+		if(table.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Cần chọn một dòng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else {
+			int row = table.getSelectedRow();
+			tfIdNV.setText((String) table.getValueAt(row, 0));
+			tfIdNV.setEnabled(false);
+			tfTenNV.setText((String) table.getValueAt(row, 1));
+			tfNgaySinhNV.setText((String) table.getValueAt(row, 2));
+			tfGioiTinhNV.setText((String) table.getValueAt(row, 3));
+			tfDiaChiNV.setText((String) table.getValueAt(row, 4));
+			tfSdtNV.setText((String) table.getValueAt(row, 5));
+			btnCapNhat.setVisible(true);
+			return true;
+		}
+	}
+	
 	private void update() {
-		if(setDisplayInput(true)) {
-			isupdate = true;
+		NhanVien nv = getNhanVien();
+		if(setUpdate() && nv != null) {
+			boolean ck = myConn.update(nv.getIdNhanVien(), null, null, nv, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+				loadData("All", "");
+			}else {
+				JOptionPane.showMessageDialog(null, "Cập nhật thất bại", "Error update", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
-		}
+		cancel();
 	}
 	
 	private void delete() {
 		int row = table.getSelectedRow();
 		if(row < 0) {
 			System.out.println("Error delete");
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng trong cột để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Cần chọn một hàng để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		int select = JOptionPane.showOptionDialog(null, "Bạn có chắc muốn xóa không", "Delete", 0, JOptionPane.YES_NO_OPTION, null, null, 1);
@@ -366,6 +378,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	
 	private void cancel() {
 		tfIdNV.setText("");
+		tfIdNV.setEnabled(true);
 		tfTenNV.setText("");
 		tfNgaySinhNV.setText("");
 		tfDiaChiNV.setText("");
@@ -374,7 +387,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 		tfTimKiem.setText("");
 		timKiemCB.setSelectedIndex(0);
 		thongKeCB.setSelectedIndex(0);
-		setDisplayInput(false);
+		btnCapNhat.setVisible(false);
 	}
 	
 	private String[] getSearch() {
@@ -387,12 +400,11 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnThem) {
-			addOrUpdate();
+			add();
 			return;
 		}
 		if(e.getSource() == btnSua) {
-			
-			update();
+			setUpdate();
 			return;
 		}
 		if(e.getSource() == btnXoa) {
@@ -413,6 +425,10 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 			loadVar();
 			return;
 		}
+		if(e.getSource() == btnCapNhat) {
+			update();
+			return;
+		}
 		if(e.getSource() == btnThemFile) {
 			imp = new ImportFile();
 			int returnVal = fileDialog.showOpenDialog(this);
@@ -421,6 +437,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener {
 				       	   + "\\" + fileDialog.getSelectedFile().getName();
 	   			try {
 					imp.importFileNV(path, myConn);
+					loadData("All", "");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

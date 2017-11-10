@@ -33,21 +33,21 @@ import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.Sach;
  
 public class QuanLySach extends JPanel implements ActionListener {
-	private String titleCol[] = {"Mã Sách", "Tên Sách", "Nhà Xuất Bản", "Tên Tác Giả", "Năm Xuất Bản", "Giá Sách", "Thể Loại", "Ngôn Ngữ"};
+	private String titleCol[] = {"Mã sách", "Tên sách", "Nhà xuất bản", "Tên tác giả", "Năm xuất bản", "Giá sách", "Thể loại", "Ngôn ngữ"};
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
 	private ExportFile ef;
 	private ImportFile imp;
-	private JButton btnThem, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnNhapFile, btnXuatFile;
+	private JButton btnThem, btnCancel, btnSua, btnXoa, btnTimKiem, btnThongKe, btnNhapFile, btnXuatFile, btnCapNhat;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idSach", "TenSach", "NhaXB", "TenTG", "NamXB"};
 	private String[] thongKeVal = {"NgonNgu", "TheLoai", "TenTG", "NhaXB", "NamXB"};
 	private JTextField tfIdS, tfTimKiem, tfTenS, tfNhaXB, tfTenTG, tfNamXB, tfGiaS, tfTheLoai, tfNgonNgu;
-	private boolean isupdate = false;
 	MyConnectDB myConn;
-	  
 	
+	private JPanel inputPanelL, inputPanelR, btnOtherPanel;
+	  
 	
 	public QuanLySach(MyConnectDB connectDB) {
 		myConn = connectDB;
@@ -74,7 +74,7 @@ public class QuanLySach extends JPanel implements ActionListener {
 
 	private JPanel createTitlePanel() {
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel("Quản Lý Sách");
+		JLabel label = new JLabel("Quản lý sách");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
 		label.setForeground(Color.YELLOW);
 		panel.add(label);
@@ -100,8 +100,8 @@ public class QuanLySach extends JPanel implements ActionListener {
 	private JPanel createBottomPanel() {
 		JPanel panel = new JPanel(new GridLayout(1, 3));
 		panel.setBorder(new EmptyBorder(10, 50, 10, 50));
-		panel.add(createInputPanelL());
-		panel.add(createInputPanelR());
+		panel.add(inputPanelL = createInputPanelL());
+		panel.add(inputPanelR = createInputPanelR());
 		panel.add(createButtonPanel());
 		
 		return panel;
@@ -109,18 +109,20 @@ public class QuanLySach extends JPanel implements ActionListener {
 	
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 145, 20));
-		panelLeft.add(new JLabel("Mã Sách"));
-		panelLeft.add(new JLabel("Nhà Xuất Bản"));
-		panelLeft.add(new JLabel("Năm Xuất Bản"));
-		panelLeft.add(new JLabel("Thể Loại"));
+		JPanel panelLeft = new JPanel(new GridLayout(5, 1));
+		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panelLeft.add(new JLabel("Mã sách"));
+		panelLeft.add(new JLabel("Nhà xuất bản"));
+		panelLeft.add(new JLabel("Năm xuất bản"));
+		panelLeft.add(new JLabel("Thể loại"));
+		panelLeft.add(new JLabel(""));
 
-		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(5, 1, 5, 5));
 		panelRight.add(tfIdS = new JTextField());
 		panelRight.add(tfNhaXB = new JTextField());
 		panelRight.add(tfNamXB = new JTextField());
 		panelRight.add(tfTheLoai = new JTextField());
+		panelRight.add(new JLabel(""));
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -130,18 +132,24 @@ public class QuanLySach extends JPanel implements ActionListener {
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 145, 20));
-		panelLeft.add(new JLabel("Tên Sách"));
-		panelLeft.add(new JLabel("Tên Tác Giả"));
-		panelLeft.add(new JLabel("Giá Sách"));
-		panelLeft.add(new JLabel("Ngôn Ngữ"));
+		JPanel panelLeft = new JPanel(new GridLayout(5, 1));
+		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panelLeft.add(new JLabel("Tên sách"));
+		panelLeft.add(new JLabel("Tên tác giả"));
+		panelLeft.add(new JLabel("Giá sách"));
+		panelLeft.add(new JLabel("Ngôn ngữ"));
+		panelLeft.add(new JLabel(""));
 		
-		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(5, 1, 5, 5));
 		panelRight.add(tfTenS = new JTextField());
 		panelRight.add(tfTenTG = new JTextField());
 		panelRight.add(tfGiaS = new JTextField());
 		panelRight.add(tfNgonNgu = new JTextField());
+		JPanel panelBut = new JPanel(new GridLayout());
+		panelBut.add(btnCapNhat = createButton("Cập nhật"));
+		panelBut.setBorder(new EmptyBorder(0, 120, 0, 0));
+		btnCapNhat.setVisible(false);
+		panelRight.add(panelBut);
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -153,7 +161,7 @@ public class QuanLySach extends JPanel implements ActionListener {
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
 		panel.add(createTKTKPanel());
-		panel.add(createButPanel());
+		panel.add(btnOtherPanel = createButPanel());
 		
 		return panel;
 	}
@@ -202,10 +210,10 @@ public class QuanLySach extends JPanel implements ActionListener {
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
-		panel.add(btnNhapFile = createButton("Nhập File"));
-		panel.add(btnXuatFile = createButton("Xuất File"));
+		panel.add(btnNhapFile = createButton("Nhập file"));
+		panel.add(btnXuatFile = createButton("Xuất file"));
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
-		btnXuatFile.setToolTipText("Xuất File");
+		btnXuatFile.setToolTipText("Xuất file");
 		
 		return panel;
 	}
@@ -215,12 +223,12 @@ public class QuanLySach extends JPanel implements ActionListener {
 		panel.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panel.add(btnTimKiem = createButton(""));
 		btnTimKiem.setIcon(new ImageIcon(this.getClass().getResource("/search.png")));
-		btnTimKiem.setToolTipText("Tìm Kiếm");
+		btnTimKiem.setToolTipText("Tìm kiếm");
 		timKiemCB = new JComboBox(timKiemVal);
 		panel.add(timKiemCB);
 		panel.add(btnThongKe = createButton(""));
 		btnThongKe.setIcon(new ImageIcon(this.getClass().getResource("/tk.png")));
-		btnThongKe.setToolTipText("Thống Kê");
+		btnThongKe.setToolTipText("Thống kê");
 		thongKeCB = new JComboBox(thongKeVal);
 		panel.add(thongKeCB);
 		
@@ -258,11 +266,11 @@ public class QuanLySach extends JPanel implements ActionListener {
 	private String[] getTK() {
 		String[] arr = new String[2];
 		arr[0] = thongKeCB.getSelectedItem().toString().trim();
-		if(arr[0].equals("NgonNgu")) arr[1] = "Ngôn Ngữ";
-		if(arr[0].equals("TenTG")) arr[1] = "Tên Tác Giả";
-		if(arr[0].equals("TheLoai")) arr[1] = "Thể Loại";
-		if(arr[0].equals("NhaXB")) arr[1] = "Nhà Xuất Bản";
-		if(arr[0].equals("NamXB")) arr[1] = "Năm Xuất Bản";
+		if(arr[0].equals("NgonNgu")) arr[1] = "Ngôn ngữ";
+		if(arr[0].equals("TenTG")) arr[1] = "Tên tác giả";
+		if(arr[0].equals("TheLoai")) arr[1] = "Thể loại";
+		if(arr[0].equals("NhaXB")) arr[1] = "Nhà xuất bản";
+		if(arr[0].equals("NamXB")) arr[1] = "Năm xuất bản";
 		
 		return arr;
 	}
@@ -297,24 +305,6 @@ public class QuanLySach extends JPanel implements ActionListener {
 		cancel();
 	}
 	
-	private boolean setDisplayInput(boolean update) {
-		if(update && table.getSelectedRow() < 0) {
-			return false;
-		}else if(update) {
-			int row = table.getSelectedRow();
-			tfIdS.setText((String) table.getValueAt(row, 0));
-			tfTenS.setText((String) table.getValueAt(row, 1));
-			tfNhaXB.setText((String) table.getValueAt(row, 2));
-			tfTenTG.setText((String) table.getValueAt(row, 3));
-			tfNamXB.setText((String) table.getValueAt(row, 4));
-			tfGiaS.setText((String) table.getValueAt(row, 5));
-			tfTheLoai.setText((String) table.getValueAt(row, 6));
-			tfNgonNgu.setText((String) table.getValueAt(row, 7));
-		}
-
-		return true;
-	}
-	
 	private boolean checkInt(String str) {
 		for(int i = 0; i < str.length(); i++) {
 			if(str.charAt(i) >= '0' && str.charAt(i) <= '9') return true;
@@ -343,39 +333,58 @@ public class QuanLySach extends JPanel implements ActionListener {
 		return s;
 	}
 	
-	private void addOrUpdate() {
+	private void add() {
 		Sach s = getSach();
 		if(s != null) {
-			if(isupdate) {
-				myConn.update(s.getIdSach(), s, null, null, null, null);
-				loadData("All", "");
-				isupdate = false;
-			}else {
-				myConn.insert("Sach", s, null, null, null, null);
+			boolean ck = myConn.insert("Sach", s, null, null, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Thêm thành công.");
 				loadData("All", "");
 			}
-			cancel();
-			setDisplayInput(false);
 		}else {
 			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
 		}
-
+	}
+	
+	private boolean setUpdate() {
+		if(table.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Cần chọn một dòng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else {
+			int row = table.getSelectedRow();
+			tfIdS.setText((String) table.getValueAt(row, 0));
+			tfIdS.setEnabled(false);
+			tfTenS.setText((String) table.getValueAt(row, 1));
+			tfNhaXB.setText((String) table.getValueAt(row, 2));
+			tfTenTG.setText((String) table.getValueAt(row, 3));
+			tfNamXB.setText((String) table.getValueAt(row, 4));
+			tfGiaS.setText((String) table.getValueAt(row, 5));
+			tfTheLoai.setText((String) table.getValueAt(row, 6));
+			tfNgonNgu.setText((String) table.getValueAt(row, 7));
+			btnCapNhat.setVisible(true);
+			return true;
+		}
 	}
 	
 	private void update() {
-		if(setDisplayInput(true)) {
-			isupdate = true;
+		Sach s = getSach();
+		if(setUpdate() && s != null) {
+			boolean ck = myConn.update(s.getIdSach(), s, null, null, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+				loadData("All", "");
+			}else {
+				JOptionPane.showMessageDialog(null, "Cập nhật thất bại", "Error update", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
-		}
+		cancel();
 	}
 	
 	private void delete() {
 		int row = table.getSelectedRow();
 		if(row < 0) {
 			System.out.println("Error delete");
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng trong bảng để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Cần chọn một hàng để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		int select = JOptionPane.showOptionDialog(null, "Bạn có chắc muốn xóa không", "Delete", 0, JOptionPane.YES_NO_OPTION, null, null, 1);
@@ -388,6 +397,7 @@ public class QuanLySach extends JPanel implements ActionListener {
 	
 	private void cancel() {
 		tfIdS.setText("");
+		tfIdS.setEnabled(true);
 		tfTenS.setText("");
 		tfNamXB.setText("");
 		tfTenTG.setText("");
@@ -398,7 +408,7 @@ public class QuanLySach extends JPanel implements ActionListener {
 		tfTimKiem.setText("");
 		timKiemCB.setSelectedIndex(0);
 		thongKeCB.setSelectedIndex(0);
-		setDisplayInput(false);
+		btnCapNhat.setVisible(false);
 	}
 	
 	private String[] getSearch() {
@@ -412,12 +422,11 @@ public class QuanLySach extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnThem) {
-			addOrUpdate();
+			add();
 			return;
 		}
 		if(e.getSource() == btnSua) {
-			
-			update();
+			setUpdate();
 			return;
 		}
 		if(e.getSource() == btnXoa) {
@@ -436,6 +445,10 @@ public class QuanLySach extends JPanel implements ActionListener {
 		}
 		if(e.getSource() == btnThongKe) {
 			loadVar();
+			return;
+		}
+		if(e.getSource() == btnCapNhat) {
+			update();
 			return;
 		}
 		if(e.getSource() == btnNhapFile) {
@@ -512,6 +525,46 @@ public class QuanLySach extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	public JButton getBtnThongKe() {
+		return btnThongKe;
+	}
+
+	public void setBtnThongKe(JButton btnThongKe) {
+		this.btnThongKe = btnThongKe;
+	}
+
+	public JComboBox getThongKeCB() {
+		return thongKeCB;
+	}
+
+	public void setThongKeCB(JComboBox thongKeCB) {
+		this.thongKeCB = thongKeCB;
+	}
+
+	public JPanel getInputPanelL() {
+		return inputPanelL;
+	}
+
+	public void setInputPanelL(JPanel inputPanelL) {
+		this.inputPanelL = inputPanelL;
+	}
+
+	public JPanel getInputPanelR() {
+		return inputPanelR;
+	}
+
+	public void setInputPanelR(JPanel inputPanelR) {
+		this.inputPanelR = inputPanelR;
+	}
+
+	public JPanel getBtnOtherPanel() {
+		return btnOtherPanel;
+	}
+
+	public void setBtnOtherPanel(JPanel btnOtherPanel) {
+		this.btnOtherPanel = btnOtherPanel;
 	}
 	
 }

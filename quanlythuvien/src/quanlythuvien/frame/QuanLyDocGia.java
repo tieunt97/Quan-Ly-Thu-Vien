@@ -31,23 +31,23 @@ import quanlythuvien.connect.ExportFile;
 import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.DocGia;
+import quanlythuvien.object.Sach;
 
 public class QuanLyDocGia extends JPanel implements ActionListener{
-	private String titleCol[] = {"Mã ĐG", "Họ Tên", "Ngày Sinh", "Giới Tính", "Email", "Số ĐT", "Địa Chỉ"};
+	private String titleCol[] = {"Mã độc giả", "Họ tên", "Ngày sinh", "Giới tính", "Email", "Số điện thoại", "Địa chỉ"};
 	private JTable table;
 	final JFileChooser  fileDialog = new JFileChooser();
 	private String exFile;
-	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnThongKe, btnXuatFile, btnThemFile, btnCancel;
+	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnThongKe, btnXuatFile, btnThemFile, btnCancel, btnCapNhat;
 	private JComboBox timKiemCB, thongKeCB;
 	private String[] timKiemVal = {"All", "idDocGia", "TenDG", "NgaySinh", "DiaChi", "GioiTinh"};
 	private String[] thongKeVal = {"TenDG", "GioiTinh", "DiaChi"};
 	private JTextField tfIdDG, tfTenDG, tfNgaySinhDG, tfGioiTinhDG, tfEmail, tfSdtDG, tfDiaChi, tfTimKiem;
-	private boolean isupdate = false;
 	MyConnectDB myConn;
 	private ExportFile ef; 
 	private ImportFile imp;
 	
-	
+	 
 	public QuanLyDocGia(MyConnectDB connectDB) {
 		myConn = connectDB;
 		
@@ -74,7 +74,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 
 	private JPanel createTitlePanel() {
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel("Quản Lý Độc Giả");
+		JLabel label = new JLabel("Quản lý độc giả");
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
 		label.setForeground(Color.YELLOW);
 		panel.add(label);
@@ -110,11 +110,11 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 145, 20));								
-		panelLeft.add(new JLabel("Mã Độc Giả"));
-		panelLeft.add(new JLabel("Ngày Sinh"));
+		panel.setBorder(new EmptyBorder(10, 0, 150, 20));								
+		panelLeft.add(new JLabel("Mã độc giả"));
+		panelLeft.add(new JLabel("Ngày sinh"));
 		panelLeft.add(new JLabel("Email"));
-		panelLeft.add(new JLabel("Địa Chỉ"));
+		panelLeft.add(new JLabel("Địa chỉ"));
 		
 		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
 		panelRight.add(tfIdDG = new JTextField());
@@ -130,16 +130,22 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
-		panel.setBorder(new EmptyBorder(10, 0, 180, 20));											
-		JPanel panelLeft = new JPanel(new GridLayout(3, 1));
-		panelLeft.add(new JLabel("Họ Tên"));
-		panelLeft.add(new JLabel("Giới Tính"));
-		panelLeft.add(new JLabel("Số ĐT"));
+		panel.setBorder(new EmptyBorder(10, 0, 150, 20));											
+		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
+		panelLeft.add(new JLabel("Họ tên"));
+		panelLeft.add(new JLabel("Giới tính"));
+		panelLeft.add(new JLabel("Số điện thoại"));
+		panelLeft.add(new JLabel(""));
 		
-		JPanel panelRight = new JPanel(new GridLayout(3, 1, 5, 5));
+		JPanel panelRight = new JPanel(new GridLayout(4, 1, 5, 5));
 		panelRight.add(tfTenDG = new JTextField());
 		panelRight.add(tfGioiTinhDG = new JTextField());
 		panelRight.add(tfSdtDG = new JTextField());
+		JPanel panelBut = new JPanel(new GridLayout());
+		panelBut.setBorder(new EmptyBorder(0, 120, 0, 0));
+		panelBut.add(btnCapNhat = createButton("Cập nhật"));
+		btnCapNhat.setVisible(false);
+		panelRight.add(panelBut);
 		
 		panel.add(panelLeft, BorderLayout.WEST);
 		panel.add(panelRight, BorderLayout.CENTER);
@@ -200,10 +206,10 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		panel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		panel.add(btnCancel = createButton("Hủy"));
 		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/cancel.png")));
-		panel.add(btnThemFile = createButton("Nhập File"));
-		panel.add(btnXuatFile = createButton("Xuất File"));
+		panel.add(btnThemFile = createButton("Nhập file"));
+		panel.add(btnXuatFile = createButton("Xuất file"));
 		btnXuatFile.setIcon(new ImageIcon(this.getClass().getResource("/update.png")));
-		btnXuatFile.setToolTipText("Xuất File");
+		btnXuatFile.setToolTipText("Xuất fle");
 		
 		return panel;
 	}
@@ -212,12 +218,12 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		panel.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panel.add(btnTimKiem = createButton(""));
 		btnTimKiem.setIcon(new ImageIcon(this.getClass().getResource("/search.png")));
-		btnTimKiem.setToolTipText("Tìm Kiếm");
+		btnTimKiem.setToolTipText("Tìm kiếm");
 		timKiemCB = new JComboBox(timKiemVal);
 		panel.add(timKiemCB);
 		panel.add(btnThongKe = createButton(""));
 		btnThongKe.setIcon(new ImageIcon(this.getClass().getResource("/tk.png")));
-		btnThongKe.setToolTipText("Thống Kê");
+		btnThongKe.setToolTipText("Thống kê");
 		thongKeCB = new JComboBox(thongKeVal);
 		panel.add(thongKeCB);
 		
@@ -255,9 +261,9 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	private String[] getTK() {
 		String[] arr = new String[2];
 		arr[0] = thongKeCB.getSelectedItem().toString().trim();
-		if(arr[0].equals("TenDG")) arr[1] = "Tên Độc Giả";
-		if(arr[0].equals("GioiTinh")) arr[1] = "Giới Tính";
-		if(arr[0].equals("DiaChi")) arr[1] = "Địa Chỉ";
+		if(arr[0].equals("TenDG")) arr[1] = "Tên độc giả";
+		if(arr[0].equals("GioiTinh")) arr[1] = "Giới tính";
+		if(arr[0].equals("DiaChi")) arr[1] = "Địa chỉ";
 
 		return arr;
 	}
@@ -292,23 +298,6 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		table.setModel(model);
 	}
 	
-	private boolean setDisplayInput(boolean update) {
-		if(update && table.getSelectedRow() < 0) {
-			return false;
-		}else if(update) {
-			int row = table.getSelectedRow();
-			tfIdDG.setText((String) table.getValueAt(row, 0));
-			tfTenDG.setText((String) table.getValueAt(row, 1));
-			tfNgaySinhDG.setText((String) table.getValueAt(row, 2));
-			tfGioiTinhDG.setText((String) table.getValueAt(row, 3));
-			tfEmail.setText((String) table.getValueAt(row, 4));
-			tfSdtDG.setText((String) table.getValueAt(row, 5));
-			tfDiaChi.setText((String) table.getValueAt(row, 6));
-		}
-
-		return true;
-	}
-	
 	private DocGia getDocGia() {
 		String id = tfIdDG.getText().trim().toUpperCase(); 
 		String ten = tfTenDG.getText().trim();
@@ -325,38 +314,59 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		return dg;
 	}
 	
-	private void addOrUpdate() {
+	private void add() {
 		DocGia dg = getDocGia();
 		if(dg != null) {
-			if(isupdate) {
-				myConn.update(dg.getIdDocGia(), null, dg, null, null, null);
+			boolean ck = myConn.insert("DocGia", null, dg, null, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Thêm thành công");
 				loadData("All", "");
-				isupdate = false;
 			}else {
-				myConn.insert("DocGia", null, dg, null, null, null);
-				loadData("All", "");
+				JOptionPane.showMessageDialog(null, "Có lỗi xảy ra");
 			}
-			cancel();
-			setDisplayInput(false);
 		}else {
 			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống hoặc trùng khóa", "Error insert", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
+	private boolean setUpdate() {
+		if(table.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Cần chọn một dòng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else {
+			int row = table.getSelectedRow();
+			tfIdDG.setText((String) table.getValueAt(row, 0));
+			tfIdDG.setEnabled(false);
+			tfTenDG.setText((String) table.getValueAt(row, 1));
+			tfNgaySinhDG.setText((String) table.getValueAt(row, 2));
+			tfGioiTinhDG.setText((String) table.getValueAt(row, 3));
+			tfEmail.setText((String) table.getValueAt(row, 4));
+			tfSdtDG.setText((String) table.getValueAt(row, 5));
+			tfDiaChi.setText((String) table.getValueAt(row, 6));
+			btnCapNhat.setVisible(true);
+			return true;
+		}
+	}
+	
 	private void update() {
-		if(setDisplayInput(true)) {
-			isupdate = true;
+		DocGia dg = getDocGia();
+		if(setUpdate() && dg != null) {
+			boolean ck = myConn.update(dg.getIdDocGia(), null, dg, null, null, null);
+			if(ck) {
+				JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+				loadData("All", "");
+			}else {
+				JOptionPane.showMessageDialog(null, "Cập nhật thất bại", "Error update", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng để sửa", "Error update", JOptionPane.ERROR_MESSAGE);
-		}
+		cancel();
 	}
 	
 	private void delete() {
 		int row = table.getSelectedRow();
 		if(row < 0) {
 			System.out.println("Error delete");
-			JOptionPane.showMessageDialog(null, "Bạn phải chọn một hàng trong cột để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Cần chọn một hàng để xóa", "Error delete", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		int select = JOptionPane.showOptionDialog(null, "Bạn có chắc muốn xóa không", "Delete", 0, JOptionPane.YES_NO_OPTION, null, null, 1);
@@ -369,6 +379,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	
 	private void cancel() {
 		tfIdDG.setText("");
+		tfIdDG.setEnabled(true);
 		tfTenDG.setText("");
 		tfDiaChi.setText("");
 		tfGioiTinhDG.setText("");
@@ -378,7 +389,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		tfTimKiem.setText("");
 		timKiemCB.setSelectedIndex(0);
 		thongKeCB.setSelectedIndex(0);
-		setDisplayInput(false);
+		btnCapNhat.setVisible(false);
 	}
 	
 	private String[] getSearch() {
@@ -391,12 +402,11 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnThem) {
-			addOrUpdate();
+			add();
 			return;
 		}
 		if(e.getSource() == btnSua) {
-			
-			update();
+			setUpdate();
 			return;
 		}
 		if(e.getSource() == btnXoa) {
@@ -411,6 +421,10 @@ public class QuanLyDocGia extends JPanel implements ActionListener{
 		if(e.getSource() == btnTimKiem) {
 			String arr[] = getSearch();
 			loadData(arr[0], arr[1]);
+			return;
+		}
+		if(e.getSource() == btnCapNhat) {
+			update();
 			return;
 		}
 		if(e.getSource() == btnThemFile) {
