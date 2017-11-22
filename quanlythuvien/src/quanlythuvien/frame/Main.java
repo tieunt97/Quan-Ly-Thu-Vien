@@ -1,5 +1,7 @@
 package quanlythuvien.frame;
 
+import java.awt.Toolkit;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -23,6 +25,7 @@ public class Main extends JFrame {
 	}
 
 	private void setDisplay() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/iconF.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 720);
 		setLocationRelativeTo(null);

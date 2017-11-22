@@ -21,6 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
@@ -52,6 +54,7 @@ public class DangKy extends JDialog {
 	 * Create the dialog.
 	 */
 	public DangKy(MyConnectDB myConn) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/iconF.png")));
 		this.myConn = myConn;
 		setBounds(100, 100, 448, 547);
 		getContentPane().setLayout(new BorderLayout());

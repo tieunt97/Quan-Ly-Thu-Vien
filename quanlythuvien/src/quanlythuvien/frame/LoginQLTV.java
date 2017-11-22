@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -49,6 +50,7 @@ public class LoginQLTV extends JFrame {
 			public void run() {
 				try {
 					LoginQLTV frame = new LoginQLTV();
+					frame.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/iconF.png")));
 					frame.setResizable(false);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
