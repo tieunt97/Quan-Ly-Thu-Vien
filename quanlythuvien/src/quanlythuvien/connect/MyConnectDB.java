@@ -131,6 +131,25 @@ public class MyConnectDB {
 		return rs;
 	}
 	
+	public ResultSet getVar(String muonThongKe, String sum) {
+		ResultSet rs = null;
+		String qSql = null;
+		if(sum.equals("")) {
+			qSql = "select " + muonThongKe + ", sum(DatCoc) from MuonTra group by " + muonThongKe; 
+		}else {
+			qSql = "select " + muonThongKe + ", sum(TienPhat) from MuonTra natural join ChiTietMuonTra group by " + muonThongKe;
+		}
+		Statement stmt;
+		try {
+			stmt = (Statement) conn.createStatement();
+			rs = stmt.executeQuery(qSql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	
 	public boolean deleteID(String table, String idT,String id) {
 		String qSql = "delete from " + table + " where " + idT + " = ?";
 		PreparedStatement ps = null;
@@ -365,7 +384,7 @@ public class MyConnectDB {
 		}
 	}
 	
-	public void insertTK(TaiKhoan tk) {
+	public boolean insertTK(TaiKhoan tk) {
 		String qSql = "insert into TaiKhoan values(?, ?, ?)";
 		PreparedStatement ps = null;
 		try {
@@ -376,13 +395,16 @@ public class MyConnectDB {
 			
 			if(ps.executeUpdate() > 0) {
 				System.out.print("\ninsert TK success.");
+				return true;
 			}else {
 				System.out.println("insert TK error.");
+				return false;
 			}
 		} catch (SQLException e) {
 			System.out.print("\ninsert TK error.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
 	}
 	

@@ -1,21 +1,12 @@
 package quanlythuvien.connect;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JTable;
 
@@ -28,6 +19,11 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTbl;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
 public class ExportFile { 
 	
@@ -51,7 +47,7 @@ public class ExportFile {
 		 InputStream imgFile = this.getClass().getResourceAsStream("/bk.jpg");
 		 run.addPicture(imgFile, XWPFDocument.PICTURE_TYPE_PNG, "3", Units.toEMU(45), Units.toEMU(68));
 		 
-		 String date[] = getDate();
+		 String date[] = Check.getDate();
 		 XWPFParagraph par1 = doc.createParagraph();
 		 XWPFRun run1 = par1.createRun();
 		 run1.setText("Ngày " + date[0] + " tháng " + date[1] + " năm " + date[2]);
@@ -89,6 +85,7 @@ public class ExportFile {
 		}
 		if(cols > 4) {
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setWidth(500);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
@@ -120,6 +117,7 @@ public class ExportFile {
 		}else {
 			cols -= 1;
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
 				XWPFTableRow row= xtable.getRow(i);
@@ -156,6 +154,7 @@ public class ExportFile {
 		}
 		if(cols > 4) {
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setWidth(500);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
@@ -185,6 +184,7 @@ public class ExportFile {
 		}else {
 			cols -= 1;
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
 				XWPFTableRow row= xtable.getRow(i);
@@ -193,7 +193,7 @@ public class ExportFile {
 					if (i == 0) {
 						if(j == 0) cell.setText("TT");
 						if(j == 1) cell.setText(table.getModel().getColumnName(1));
-						if(j == 2) cell.setText("Số Lượng");
+						if(j == 2) cell.setText(table.getModel().getColumnName(2));
 					}else {
 						if(j == 0) cell.setText((String) table.getModel().getValueAt(i - 1, j));
 						if(j == 1) cell.setText((String) table.getModel().getValueAt(i - 1, j));
@@ -221,6 +221,7 @@ public class ExportFile {
 		}
 		if(cols > 4) {
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setWidth(500);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
@@ -254,6 +255,7 @@ public class ExportFile {
 		}else {
 			cols -= 1;
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
 				XWPFTableRow row= xtable.getRow(i);
@@ -289,6 +291,7 @@ public class ExportFile {
 		}
 		if(cols > 4) {
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setWidth(500);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
@@ -318,6 +321,7 @@ public class ExportFile {
 		}else {
 			cols -= 1;
 			XWPFTable xtable = doc.createTable(rows, cols);
+			setTableAlignment(xtable, STJc.CENTER);
 			xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 			for(int i = 0; i < rows; i++) {
 				XWPFTableRow row= xtable.getRow(i);
@@ -326,7 +330,7 @@ public class ExportFile {
 					if (i == 0) {
 						if(j == 0) cell.setText("TT");
 						if(j == 1) cell.setText(table.getModel().getColumnName(1));
-						if(j == 2) cell.setText("Số Lượng");
+						if(j == 2) cell.setText(table.getModel().getColumnName(2));
 					}else {
 						if(j == 0) cell.setText((String) table.getModel().getValueAt(i - 1, j));
 						if(j == 1) cell.setText((String) table.getModel().getValueAt(i - 1, j));
@@ -344,12 +348,9 @@ public class ExportFile {
 	}
 	
 	public void printContentPhieuMT(String path, XWPFDocument doc, JTable table, int row, MyConnectDB connDB) throws IOException, SQLException {
-		
-		int cols = 1;
 		if(table == null || row < 0) {
 			return;
-		}else
-			cols = table.getModel().getColumnCount();
+		}
 		String idMuonTra = (String) table.getValueAt(row, 0);
 		String idDocGia = (String) table.getValueAt(row, 1);
 		String idNhanVien = (String) table.getValueAt(row, 2);
@@ -383,9 +384,11 @@ public class ExportFile {
 		
 		
 		XWPFTable xtable = doc.createTable();
+		setTableAlignment(xtable, STJc.CENTER);
 		xtable.setWidth(500);
 		xtable.setCellMargins(200, 200, 200, 200); //thiết lập kích cỡ từng ô trong bảng
 				
+		int tienPhat = 0;
 		XWPFTableRow titleRow = xtable.getRow(0);
 		titleRow.getCell(0).setText("TT");
 		titleRow.addNewTableCell().setText("Mã Mượn Trả");
@@ -398,13 +401,23 @@ public class ExportFile {
 		int i = 1;
 		while(rs2.next()) {
 			XWPFTableRow nextRow = xtable.createRow();
-			nextRow.getCell(0).setText("" + i++ + "");
+			nextRow.getCell(0).setText(i++ + "");
 			nextRow.getCell(1).setText(rs2.getString(1));
 			nextRow.getCell(2).setText(rs2.getString(2));
 			nextRow.getCell(3).setText(rs2.getString(3));
 			nextRow.getCell(4).setText(rs2.getString(4));
 			nextRow.getCell(5).setText(rs2.getString(5));
+			tienPhat += Integer.parseInt(rs2.getString(5));
 		}
+			XWPFParagraph par1 = doc.createParagraph();
+			XWPFRun run1 = par1.createRun();
+			run1.addBreak();
+//			run1.setBold(true);
+			run1.setItalic(true);
+			run1.setFontSize(12);
+			run1.setText("Tổng tiền phạt:           " + tienPhat + " đ");
+			par1.setAlignment(ParagraphAlignment.RIGHT);
+			
 		
 		
 		FileOutputStream fout = new FileOutputStream(new File(path));
@@ -423,7 +436,6 @@ public class ExportFile {
 		run.setFontFamily("CamBria (Headings)");
 		run.setBold(true);
 		run.setFontSize(11);
-//		run.addBreak();
 		
 		XWPFParagraph par1 = doc.createParagraph();
 		XWPFRun run1 = par1.createRun();
@@ -440,15 +452,23 @@ public class ExportFile {
 		doc.write(fout);
 		fout.close();
 	}
-	//lấy ngày-tháng-năm
-	public String[] getDate() {
-		String date[] = new String[3];
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); //định dạng ngày
-	    Date today = new Date(); 
-	    String stringDate = dateFormat.format(today); //lấy ngày hiện tại
-	    date = stringDate.split("-");
-	    
-		return date;
-	}
 	
+	//Can chinh table
+	private void setTableAlignment(XWPFTable table, STJc.Enum justification) {
+	    CTTblPr tblPr = table.getCTTbl().getTblPr();
+	    CTJc jc = (tblPr.isSetJc() ? tblPr.getJc() : tblPr.addNewJc());
+	    jc.setVal(justification);
+	}
+//	CTTbl cttblp = xtable.getCTTbl();
+////			CTTblPr cttblpr = cttblp.getTblPr();
+//	CTTblPr cttblpr;
+//	cttblpr = (cttblp.getTblPr() == null ? cttblp.addNewTblPr() : cttblp.getTblPr());
+//	
+//	
+////			//table direction
+////			cttblpr.addNewBidiVisual().setVal(STOnOff.ON);
+//	
+//	//table alignment
+//	CTJc ctjc = (cttblpr.isSetJc() ? cttblpr.getJc() : cttblpr.addNewJc());
+//	ctjc.setVal(STJc.CENTER);
 }

@@ -1,9 +1,11 @@
 eclipse.preferences.version=1
+encoding//src/quanlythuvien/connect/Check.java=UTF-8
 encoding//src/quanlythuvien/connect/ExportFile.java=UTF-8
 encoding//src/quanlythuvien/connect/ImportFile.java=UTF-8
 encoding//src/quanlythuvien/connect/MyConnectDB.java=UTF-8
+encoding//src/quanlythuvien/frame/DangKy.java=UTF-8
 encoding//src/quanlythuvien/frame/DoiMatKhau.java=UTF-8
-encoding//src/quanlythuvien/frame/Login.java=UTF-8
+encoding//src/quanlythuvien/frame/LoginQLTV.java=UTF-8
 encoding//src/quanlythuvien/frame/Main.java=UTF-8
 encoding//src/quanlythuvien/frame/MainAdmin.java=UTF-8
 encoding//src/quanlythuvien/frame/MainDG.java=UTF-8
