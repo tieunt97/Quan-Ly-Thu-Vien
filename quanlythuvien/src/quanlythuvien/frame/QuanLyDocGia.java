@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,6 +46,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	private String exFile;
 	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnThongKe, btnXuatFile, btnThemFile, btnCancel;
 	private JComboBox<String> timKiemCB, thongKeCB;
+	ButtonGroup bg;
 	private JRadioButton radNam, radNu;
 	private String[] timKiemVal = { "All", "idDocGia", "TenDG", "NgaySinh", "DiaChi", "GioiTinh", "Email", "SoDT" };
 	private String[] thongKeVal = { "TenDG", "GioiTinh", "DiaChi", "NgaySinh"};
@@ -97,12 +99,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table = createTable()));
-		panel.setBorder(new EmptyBorder(10, 15, 10, 15));
-		panel.setBackground(color);
-	
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table = createTable()));
 		panelMain.add(panel1);
 		
 		return panelMain;
@@ -128,7 +125,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 140, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
 		panelLeft.setBackground(color);
 		panelLeft.add(createLabel("Mã độc giả:"));
@@ -152,7 +149,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 140, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
 		panelLeft.setBackground(color);
 		panelLeft.add(createLabel("Tên độc giả:"));
@@ -175,8 +172,11 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBackground(color);
 		panel.setBorder(new EmptyBorder(0, 0, 0, 135));
+		bg = new ButtonGroup();
 		panel.add(radNam = createRadio("Nam"));
 		panel.add(radNu = createRadio("Nữ"));
+		bg.add(radNam);
+		bg.add(radNu);
 		
 		return panel;
 	}
@@ -193,7 +193,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 65, 0));
 		panel.add(createTKTKPanel());
 		panel.add(createButPanel());
 
@@ -440,8 +440,10 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		if (select == 0) {
 			boolean ck = myConn.deleteIDRef("DocGia", "idDocGia", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if (ck)
+			if (ck) {
 				JOptionPane.showMessageDialog(null, "Xóa thành công");
+				cancel();
+			}
 		}
 	}
 
@@ -451,8 +453,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		tfTenDG.setText("");
 		tfDiaChi.setText("");
 		gt = null;
-		radNam.setSelected(false);
-		radNu.setSelected(false);
+		bg.clearSelection();
 		tfNgaySinhDG.setText("");
 		tfSdtDG.setText("");
 		tfEmail.setText("");
@@ -473,11 +474,9 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == radNam) {
-			if(radNu.isSelected()) radNu.setSelected(false);
 			gt = "Nam";
 		}
 		if(e.getSource() == radNu) {
-			if(radNam.isSelected()) radNam.setSelected(false);
 			gt = "Nữ";
 		}
 		if (e.getSource() == btnThem) {
@@ -585,6 +584,23 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		if(row >= 0) {
 			tfIdDG.setText((String) table.getValueAt(row, 0));
@@ -604,24 +620,6 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 			tfDiaChi.setText((String) table.getValueAt(row, 6));
 			btnThem.setEnabled(false);
 		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -96,12 +96,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table = createTable()));
-		panel.setBorder(new EmptyBorder(10, 15, 10, 15));
-		panel.setBackground(color);
-	
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table = createTable()));
 		panelMain.add(panel1);
 		
 		return panelMain;
@@ -128,7 +123,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(color);
 		JPanel panelLeft = new JPanel(new GridLayout(5, 1));
-		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 110, 20));
 		panelLeft.setBackground(color);
 		panelLeft.add(createLabel("Mã sách:"));
 		panelLeft.add(createLabel("Nhà xuất bản:"));
@@ -155,7 +150,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		panel.setBackground(color);
 		JPanel panelLeft = new JPanel(new GridLayout(5, 1));
 		panelLeft.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 125, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 110, 20));
 		panelLeft.add(createLabel("Tên sách:"));
 		panelLeft.add(createLabel("Tên tác giả:"));
 		panelLeft.add(createLabel("Giá sách:"));
@@ -178,7 +173,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 65, 0));
 		panel.add(createTKTKPanel());
 		panel.add(btnOtherPanel = createButPanel());
 
@@ -425,8 +420,10 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		if (select == 0) {
 			boolean ck = myConn.deleteID("Sach", "idSach", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if (ck)
+			if (ck) {
 				JOptionPane.showMessageDialog(null, "Xóa thành công");
+				cancel();
+			}
 		}
 	}
 
@@ -600,20 +597,6 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		int row = table.getSelectedRow();
-		if(row >= 0) {
-			tfIdS.setText((String) table.getValueAt(row, 0));
-			tfIdS.setEnabled(false);
-			tfTenS.setText((String) table.getValueAt(row, 1));
-			tfNhaXB.setText((String) table.getValueAt(row, 2));
-			tfTenTG.setText((String) table.getValueAt(row, 3));
-			tfNamXB.setText((String) table.getValueAt(row, 4));
-			tfGiaS.setText((String) table.getValueAt(row, 5));
-			tfTheLoai.setText((String) table.getValueAt(row, 6));
-			tfNgonNgu.setText((String) table.getValueAt(row, 7));
-			btnThem.setEnabled(false);
-		}
-		
 	}
 
 	@Override
@@ -631,7 +614,19 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		int row = table.getSelectedRow();
+		if(row >= 0) {
+			tfIdS.setText((String) table.getValueAt(row, 0));
+			tfIdS.setEnabled(false);
+			tfTenS.setText((String) table.getValueAt(row, 1));
+			tfNhaXB.setText((String) table.getValueAt(row, 2));
+			tfTenTG.setText((String) table.getValueAt(row, 3));
+			tfNamXB.setText((String) table.getValueAt(row, 4));
+			tfGiaS.setText((String) table.getValueAt(row, 5));
+			tfTheLoai.setText((String) table.getValueAt(row, 6));
+			tfNgonNgu.setText((String) table.getValueAt(row, 7));
+			btnThem.setEnabled(false);
+		}
 	}
 
 	@Override

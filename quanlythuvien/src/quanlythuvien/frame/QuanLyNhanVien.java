@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -48,6 +49,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	private String exFile;
 	private JButton btnThem, btnSua, btnCancel, btnXuatFile, btnXoa, btnTimKiem, btnThongKe, btnThemFile;
 	private JComboBox<String> timKiemCB, thongKeCB;
+	private ButtonGroup bg;
 	private JRadioButton radNam, radNu;
 	private String[] timKiemVal = { "All", "idNhanVien", "TenNV", "NgaySinh", "DiaChi", "GioiTinh" };
 	private String[] thongKeVal = { "TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
@@ -99,12 +101,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table = createTable()));
-		panel.setBorder(new EmptyBorder(10, 15, 10, 15));
-		panel.setBackground(color);
-	
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table = createTable()));
 		panelMain.add(panel1);
 		
 		return panelMain;
@@ -129,7 +126,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	private JPanel createInputPanelL() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 140, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
 		panelLeft.setBackground(color);
 		panelLeft.add(createLabel("Mã nhân viên:"));
@@ -153,7 +150,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	private JPanel createInputPanelR() {
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 150, 20));
+		panel.setBorder(new EmptyBorder(10, 0, 140, 20));
 		JPanel panelLeft = new JPanel(new GridLayout(4, 1));
 		panelLeft.setBackground(color);
 		panelLeft.add(createLabel("Họ tên:"));
@@ -176,8 +173,11 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBackground(color);
 		panel.setBorder(new EmptyBorder(0, 0, 0, 135));
+		bg = new ButtonGroup();
 		panel.add(radNam = createRadio("Nam"));
 		panel.add(radNu = createRadio("Nữ"));
+		bg.add(radNam);
+		bg.add(radNu);
 		
 		return panel;
 	}
@@ -194,7 +194,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(10, 0, 80, 0));
+		panel.setBorder(new EmptyBorder(10, 0, 65, 0));
 		panel.add(createTKTKPanel());
 		panel.add(createButPanel());
 
@@ -438,8 +438,10 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		if (select == 0) {
 			boolean ck = myConn.deleteIDRef("NhanVien", "idNhanVien", (String) table.getValueAt(row, 0));
 			loadData("All", "");
-			if (ck)
+			if (ck) {
 				JOptionPane.showMessageDialog(null, "Xóa thành công");
+				cancel();
+			}
 		}
 	}
 
@@ -451,8 +453,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		tfDiaChiNV.setText("");
 		tfSdtNV.setText("");
 		gt = null;
-		radNam.setSelected(false);
-		radNu.setSelected(false);
+		bg.clearSelection();
 		tfTimKiem.setText("");
 		timKiemCB.setSelectedIndex(0);
 		thongKeCB.setSelectedIndex(0);
@@ -470,11 +471,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == radNam) {
-			if(radNu.isSelected()) radNu.setSelected(false);
 			gt = "Nam";
 		}
 		if(e.getSource() == radNu) {
-			if(radNam.isSelected()) radNam.setSelected(false);
 			gt = "Nữ";
 		}
 		if (e.getSource() == btnThem) {
@@ -580,6 +579,23 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		if(row >= 0) {
 			tfIdNV.setText((String) table.getValueAt(row, 0));
@@ -598,25 +614,6 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 			tfSdtNV.setText((String) table.getValueAt(row, 5));
 			btnThem.setEnabled(false);
 		}
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

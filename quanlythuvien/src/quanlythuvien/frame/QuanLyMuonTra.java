@@ -72,7 +72,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 	}
 
 	private JPanel createGridPanel() {
-		JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
+		JPanel panel = new JPanel(new GridLayout(2, 1, 0, 0));
 		panel.setBackground(color);
 		panel.add(createTable1Panel());
 		panel.add(createBottomPanel());
@@ -99,12 +99,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table1 = createTable()));
-		panel.setBorder(new EmptyBorder(10, 15, 10, 15));
-		panel.setBackground(color);
-
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table1 = createTable()));
 		panelMain.add(panel1);
 
 		return panelMain;
@@ -112,16 +107,11 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 
 	private JPanel createTable2Panel() {
 		JPanel panelMain = new JPanel(new BorderLayout());
-		panelMain.setBorder(new EmptyBorder(0, 50, 10, 30));
+		panelMain.setBorder(new EmptyBorder(0, 50, 5, 30));
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table2 = createTable()));
-		panel.setBorder(new EmptyBorder(5, 10, 5, 10));
-		panel.setBackground(color);
-
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table2 = createTable()));
 		panelMain.add(panel1);
 
 		return panelMain;
@@ -146,7 +136,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 	private JPanel createTableBottomLeftPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(0, 0, 10, 15));
+		panel.setBorder(new EmptyBorder(0, 0, 0, 15));
 		panel.add(createCTMTPanel());
 		panel.add(createInputPanel());
 
@@ -677,6 +667,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 			if (ck) {
 				loadData("All", "");
 				JOptionPane.showMessageDialog(null, "Xóa thành công");
+				cancel();
 			}
 		}
 	}
@@ -886,6 +877,23 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 		int row = table1.getSelectedRow();
 		int row1 = table2.getSelectedRow();
 		if (e.getSource() == table1 && table1.getModel().getColumnCount() > 3) {
@@ -911,24 +919,6 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 				btnThem.setEnabled(false);
 			}
 		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

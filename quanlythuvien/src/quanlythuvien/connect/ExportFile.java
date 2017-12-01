@@ -412,10 +412,11 @@ public class ExportFile {
 			XWPFParagraph par1 = doc.createParagraph();
 			XWPFRun run1 = par1.createRun();
 			run1.addBreak();
-//			run1.setBold(true);
 			run1.setItalic(true);
 			run1.setFontSize(12);
 			run1.setText("Tổng tiền phạt:           " + tienPhat + " đ");
+			run1.addBreak();
+			run1.setText("Làm tròn:                 " + Math.round((double) tienPhat/1000)*1000 + " đ");
 			par1.setAlignment(ParagraphAlignment.RIGHT);
 			
 		

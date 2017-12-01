@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import quanlythuvien.connect.MyConnectDB;
 
@@ -19,7 +21,14 @@ public class MainDG extends JFrame {
 		this.tenTK = tenTK;
 		this.loaiTK = loaiTK;
 		this.myConn = myConn;
-
+		
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		createGUI();
 		setDisplay();
 	}

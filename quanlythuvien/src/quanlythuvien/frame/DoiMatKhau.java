@@ -40,7 +40,7 @@ public class DoiMatKhau extends JPanel implements ActionListener {
 
 	private JPanel createMainTitlePanel() {
 		JPanel panelMain = new JPanel(new BorderLayout());
-		panelMain.setBorder(new EmptyBorder(15, 20, 400, 800));
+		panelMain.setBorder(new EmptyBorder(15, 20, 360, 800));
 		panelMain.setBackground(new Color(0x009999));
 		JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setBackground(new Color(0x009999));

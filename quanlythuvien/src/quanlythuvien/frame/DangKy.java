@@ -192,37 +192,25 @@ public class DangKy extends JDialog {
 				btnOk.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						DocGia dg = getDocGia();
+						TaiKhoan tk = getTaiKhoan();
 						try {
-							if (dg != null) {
-								DangKy.this.myConn.insert("DocGia", null, dg, null, null, null);
-								String tenTK = tfTaiKhoan.getText();
-								String matKhau = pwMatKhau.getText();
-								String xacNhan = pwXacNhan.getText();
-								if (tenTK.equals("")) {
-									JOptionPane.showMessageDialog(null, "Bạn chưa nhập tên tài khoản", "Warning",
-											JOptionPane.WARNING_MESSAGE);
+							if (dg != null && tk != null) {
+								boolean ck = DangKy.this.myConn.insert("DocGia", null, dg, null, null, null);
+								boolean ck1 = DangKy.this.myConn.insertTK(tk);
+								if(ck && ck1) {
+									JOptionPane.showMessageDialog(null, "Thêm tài khoản thành công");
+									cancel();
 									return;
-								}
-								if (matKhau.equals("")) {
-									JOptionPane.showMessageDialog(null, "Bạn chưa nhập mật khẩu", "Warning",
-											JOptionPane.WARNING_MESSAGE);
+								}else if(ck && !ck1) {
+									DangKy.this.myConn.deleteID("DocGia", "idDocGia", dg.getIdDocGia());
+									JOptionPane.showMessageDialog(null, "Trùng tên tài khoản", "Error", JOptionPane.ERROR_MESSAGE);
 									return;
-								}
-								if (matKhau.equals(xacNhan)) {
-									TaiKhoan tk = new TaiKhoan(tenTK, matKhau, "DG");
-									boolean ck = myConn.insertTK(tk);
-									if (ck) {
-										JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
-										cancel();
-										return;
-									} else {
-										JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại", "Error",
-												JOptionPane.ERROR_MESSAGE);
-										return;
-									}
-								} else {
-									JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu sai", "Error",
-											JOptionPane.ERROR_MESSAGE);
+								}else if(!ck && ck1) {
+									DangKy.this.myConn.deleteID("TaiKhoan", "idTaiKhoan", tk.getTenTK());
+									JOptionPane.showMessageDialog(null, "Trùng tên tài khoản", "Error", JOptionPane.ERROR_MESSAGE);
+									return;
+								}else {
+									JOptionPane.showMessageDialog(null, "Trùng tên tài khoản", "Error", JOptionPane.ERROR_MESSAGE);
 									return;
 								}
 
@@ -290,5 +278,22 @@ public class DangKy extends JDialog {
 		}
 		DocGia dg = new DocGia(id, ten, ns, gt, email, sdt, dc);
 		return dg;
+	}
+	
+	private TaiKhoan getTaiKhoan() {
+		String tenTK = tfTaiKhoan.getText();
+		String matKhau = pwMatKhau.getText();
+		String xacNhan = pwXacNhan.getText();
+		if(matKhau.equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập mật khẩu", "Warning", JOptionPane.WARNING_MESSAGE);
+			return null;
+		}
+		if(!matKhau.equals(xacNhan)) {
+			JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu sai", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		TaiKhoan tk = new TaiKhoan(tenTK, matKhau, "DG");
+		
+		return tk;
 	}
 }

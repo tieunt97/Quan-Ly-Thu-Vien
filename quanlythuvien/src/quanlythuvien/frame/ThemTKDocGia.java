@@ -82,13 +82,7 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 		panelMain.setBackground(color);
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
-		JPanel panel = new JPanel(new GridLayout());
-		panel.add(new JScrollPane(table = new JTable()));
-		table.addMouseListener(this);
-		panel.setBorder(new EmptyBorder(10, 15, 10, 15));
-		panel.setBackground(color);
-	
-		panel1.add(panel);
+		panel1.add(new JScrollPane(table = new JTable()));
 		panelMain.add(panel1);
 		
 		return panelMain;
@@ -129,7 +123,7 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel(new BorderLayout(15, 15));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(25, 0, 165, 225));
+		panel.setBorder(new EmptyBorder(25, 0, 140, 225));
 		JPanel paneltk = new JPanel(new BorderLayout(10, 10));
 		paneltk.setBackground(color);
 		paneltk.add(btnTimKiem = createButton("Tìm kiếm"), BorderLayout.WEST);
