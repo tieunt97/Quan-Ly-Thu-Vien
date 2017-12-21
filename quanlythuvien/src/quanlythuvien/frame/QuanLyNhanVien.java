@@ -18,7 +18,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,6 +25,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -37,7 +37,6 @@ import quanlythuvien.connect.Check;
 import quanlythuvien.connect.ExportFile;
 import quanlythuvien.connect.ImportFile;
 import quanlythuvien.connect.MyConnectDB;
-import quanlythuvien.object.DocGia;
 import quanlythuvien.object.NhanVien;
 
 public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListener{
@@ -55,7 +54,6 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	private String[] thongKeVal = { "TenNV", "NgaySinh", "DiaChi", "GioiTinh"};
 	private JTextField tfIdNV, tfTimKiem, tfTenNV, tfNgaySinhNV, tfDiaChiNV, tfSdtNV;
 	MyConnectDB myConn;
-	private String gt = null;
 	private Color color = new Color(0x009999);
 
 	public QuanLyNhanVien(MyConnectDB connect) {
@@ -109,6 +107,7 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 
 	private JTable createTable() {
 		JTable table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addMouseListener(this);
 		return table;
 	}
@@ -290,7 +289,13 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 
 	// load data in database
 	public void loadData(String Cot, String muonTim) {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		model.setColumnIdentifiers(titleCol);
 
 		ResultSet rs = myConn.getDataID("NhanVien", "idNhanVien", Cot, muonTim);
@@ -363,9 +368,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		String ngaysinh = tfNgaySinhNV.getText().trim();
 		String sdt = tfSdtNV.getText().trim();
 		String diachi = tfDiaChiNV.getText().trim();
+		String gt = null;
 		if(radNam.isSelected()) gt = "Nam";
 		else if(radNu.isSelected()) gt = "Nữ";
-		else gt = null;
 		if (id.equals("") || ten.equals("") || ngaysinh.equals("") || gt == null ||diachi.equals("") || sdt.equals("")) {
 			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống", "Warning", JOptionPane.WARNING_MESSAGE);
 			return null;
@@ -452,7 +457,6 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		tfNgaySinhNV.setText("");
 		tfDiaChiNV.setText("");
 		tfSdtNV.setText("");
-		gt = null;
 		bg.clearSelection();
 		tfTimKiem.setText("");
 		timKiemCB.setSelectedIndex(0);
@@ -470,12 +474,6 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == radNam) {
-			gt = "Nam";
-		}
-		if(e.getSource() == radNu) {
-			gt = "Nữ";
-		}
 		if (e.getSource() == btnThem) {
 			add();
 			return;

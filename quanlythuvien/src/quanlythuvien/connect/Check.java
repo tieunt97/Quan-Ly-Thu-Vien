@@ -169,10 +169,5 @@ public class Check {
 	    
 		return date;
 	}
-	
-	public static void main(String[] args) {
-		int c = getTienPhat("15-11-2017", "18-11-2017", "19-02-2018", 45000);
-		System.out.println(c);
-	}
 }
 

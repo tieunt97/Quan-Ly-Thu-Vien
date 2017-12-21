@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -54,7 +56,6 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 	MyConnectDB myConn;
 	private ExportFile ef;
 	private ImportFile imp;
-	private String gt = null;
 	private Color color = new Color(0x009999);
 
 	public QuanLyDocGia(MyConnectDB connectDB) {
@@ -107,6 +108,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 
 	private JTable createTable() {
 		JTable table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addMouseListener(this);
 		return table;
 	}
@@ -292,7 +294,13 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 
 	// load data in database
 	public void loadData(String Cot, String muonTim) {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		model.setColumnIdentifiers(titleCol);
 
 		ResultSet rs = myConn.getDataID("DocGia", "idDocGia", Cot, muonTim);
@@ -365,9 +373,9 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		String email = tfEmail.getText().trim();
 		String sdt = tfSdtDG.getText().trim();
 		String dc = tfDiaChi.getText().trim();
+		String gt = null;
 		if(radNam.isSelected()) gt = "Nam";
 		else if(radNu.isSelected()) gt = "Nữ";
-		else gt = null;
 		if (id.equals("") || ten.equals("") || ns.equals("") || gt == null || email.equals("") || sdt.equals("")
 				|| dc.equals("")) {
 			JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -452,7 +460,6 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		tfIdDG.setEnabled(true);
 		tfTenDG.setText("");
 		tfDiaChi.setText("");
-		gt = null;
 		bg.clearSelection();
 		tfNgaySinhDG.setText("");
 		tfSdtDG.setText("");
@@ -473,12 +480,6 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == radNam) {
-			gt = "Nam";
-		}
-		if(e.getSource() == radNu) {
-			gt = "Nữ";
-		}
 		if (e.getSource() == btnThem) {
 			add();
 			return;

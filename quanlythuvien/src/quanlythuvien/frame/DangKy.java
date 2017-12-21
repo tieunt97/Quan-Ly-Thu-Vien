@@ -1,32 +1,30 @@
 package quanlythuvien.frame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import quanlythuvien.connect.MyConnectDB;
 import quanlythuvien.object.DocGia;
 import quanlythuvien.object.TaiKhoan;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import javax.swing.border.TitledBorder;
-import javax.swing.JRadioButton;
 
 public class DangKy extends JDialog {
 

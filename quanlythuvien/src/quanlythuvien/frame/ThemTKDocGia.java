@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +30,6 @@ import quanlythuvien.object.TaiKhoan;
 public class ThemTKDocGia extends JPanel implements ActionListener, MouseListener {
 	private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnHuy;
 	private JTextField tfTenTK, tfMatKhau, tfTimKiem;
-	private JLabel lbTenTK, lbMatKhau;
 	private JTable table;
 	private String[] titleCols = { "Tên tài khoản", "Mật khẩu", "Loại tài khoản" };
 	private MyConnectDB myConn;
@@ -83,6 +83,8 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new TitledBorder(null, ""));
 		panel1.add(new JScrollPane(table = new JTable()));
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.addMouseListener(this);
 		panelMain.add(panel1);
 		
 		return panelMain;
@@ -161,7 +163,13 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 	}
 
 	public void loadData(String Cot, String muonTim, String loaiTK) {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		model.setColumnIdentifiers(titleCols);
 		ResultSet rs = null;
 		rs = myConn.getDataID("TaiKhoan", "idTaiKhoan", Cot, muonTim);
@@ -227,7 +235,7 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 			} else {
 				JOptionPane.showMessageDialog(null, "Cập nhật thất bại", "Error update", JOptionPane.ERROR_MESSAGE);
 			}
-		}
+		}else JOptionPane.showMessageDialog(null, "Có trường dữ liệu trống", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void delete() {
@@ -287,13 +295,6 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		int row = table.getSelectedRow();
-		if(row >= 0) {
-			tfTenTK.setText((String) table.getValueAt(row, 0));
-			tfTenTK.setEnabled(false);
-			tfMatKhau.setText((String) table.getValueAt(row, 1));	
-			btnThem.setEnabled(false);
-		}
 	}
 
 	@Override
@@ -311,7 +312,15 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource() == table) {
+			int row = table.getSelectedRow();
+			if(row >= 0) {
+				tfTenTK.setText((String) table.getValueAt(row, 0));
+				tfTenTK.setEnabled(false);
+				tfMatKhau.setText((String) table.getValueAt(row, 1));	
+				btnThem.setEnabled(false);
+			}
+		}
 	}
 
 	@Override

@@ -9,10 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,15 +21,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 import quanlythuvien.connect.MyConnectDB;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class LoginQLTV extends JFrame {
 
@@ -66,6 +65,13 @@ public class LoginQLTV extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginQLTV() {
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setResizable(false);
 		myConn = new MyConnectDB();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,19 +103,19 @@ public class LoginQLTV extends JFrame {
 		JLabel lblUserName = new JLabel("Tài khoản:");
 		lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblUserName.setForeground(new Color(236, 240, 241));
-		lblUserName.setBounds(32, 94, 96, 27);
+		lblUserName.setBounds(32, 87, 96, 34);
 		contentPane.add(lblUserName);
 		
 		JLabel lblPassword = new JLabel("Mật khẩu:");
 		lblPassword.setForeground(new Color(236, 240, 241));
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblPassword.setBounds(32, 137, 96, 27);
+		lblPassword.setBounds(32, 137, 96, 34);
 		contentPane.add(lblPassword);
 		
 		tfUser = new JTextField();
 		tfUser.setForeground(new Color(228, 241, 254));
 		tfUser.setBackground(new Color(108, 122, 137));
-		tfUser.setBounds(127, 97, 207, 27);
+		tfUser.setBounds(127, 90, 207, 34);
 		contentPane.add(tfUser);
 		tfUser.setColumns(10);
 		
@@ -125,7 +131,7 @@ public class LoginQLTV extends JFrame {
 		});
 		pwPass.setForeground(new Color(228, 241, 254));
 		pwPass.setBackground(new Color(108, 122, 137));
-		pwPass.setBounds(127, 140, 207, 27);
+		pwPass.setBounds(127, 140, 207, 34);
 		contentPane.add(pwPass);
 		
 		JButton btnDangNhap = new JButton("Đăng nhập");
@@ -138,7 +144,7 @@ public class LoginQLTV extends JFrame {
 		btnDangNhap.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnDangNhap.setBackground(new Color(34, 167, 240));
 		btnDangNhap.setForeground(new Color(255, 255, 255));
-		btnDangNhap.setBounds(238, 182, 96, 34);
+		btnDangNhap.setBounds(235, 193, 96, 34);
 		contentPane.add(btnDangNhap);
 		
 		JButton btnHuy = new JButton("Hủy");
@@ -151,13 +157,13 @@ public class LoginQLTV extends JFrame {
 				return;
 			}
 		});
-		btnHuy.setBounds(127, 182, 98, 34);
+		btnHuy.setBounds(127, 193, 98, 34);
 		contentPane.add(btnHuy);
 		
 		JLabel lblNhnVoy = new JLabel("Nhấn vào đây để tạo tài khoản");
 		lblNhnVoy.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mousePressed(MouseEvent arg0) {
 				new DangKy(myConn);
 				return;
 			}

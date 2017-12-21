@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -119,6 +120,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 
 	private JTable createTable() {
 		JTable table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addMouseListener(this);
 		return table;
 	}
@@ -369,9 +371,21 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 
 	// load data in database
 	public void loadData(String Cot, String muonTim) {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		model.setColumnIdentifiers(titleCol);
-		DefaultTableModel model2 = new DefaultTableModel();
+		DefaultTableModel model2 = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 
 		ResultSet rs = myConn.getDataID("MuonTra", "idMuonTra", Cot, muonTim);
 		String arr[] = new String[6];
@@ -407,7 +421,13 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 	}
 
 	private void loadDataCTMT(String muonTim) {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		model.setColumnIdentifiers(titleCol1);
 		ResultSet rs = null;
 		if (muonTim.equals("")) {
