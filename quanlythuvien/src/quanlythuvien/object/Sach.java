@@ -9,21 +9,22 @@ public class Sach {
 	private int giaSach;
 	private String theLoai;
 	private String ngonNgu;
+	private int trangThai;
 	
 	public Sach(){
 		
 	}
-	public Sach(String id, String ten, String nxb, String tg, String namxb,
-			int gia, String tl, String nn) {
-		idSach = id;
-		tenSach = ten;
-		nhaXB = nxb;
-		tenTG = tg;
-		namXB = namxb;
-		giaSach = gia;
-		theLoai = tl;
-		ngonNgu = nn;
-		
+	public Sach(String idSach, String tenSach, String nhaXB, String tenTG, String namXB,
+			int giaSach, String theLoai, String ngonNgu) {
+		this.idSach = idSach;
+		this.tenSach = tenSach;
+		this.nhaXB = nhaXB;
+		this.tenTG = tenTG;
+		this.namXB = namXB;
+		this.giaSach = giaSach;
+		this.theLoai = theLoai;
+		this.ngonNgu = ngonNgu;
+		this.trangThai = 1;
 	}
 	
 	public String getIdSach() {
@@ -74,4 +75,11 @@ public class Sach {
 	public void setNgonNgu(String ngonNgu) {
 		this.ngonNgu = ngonNgu;
 	}
+	public int getTrangThai() {
+		return trangThai;
+	}
+	public void setTrangThai(int trangThai) {
+		this.trangThai = trangThai;
+	}
+	
 }

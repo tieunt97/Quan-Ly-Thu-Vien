@@ -41,7 +41,7 @@ import quanlythuvien.object.Sach;
 
 public class QuanLySach extends JPanel implements ActionListener, MouseListener {
 	private String titleCol[] = { "Mã sách", "Tên sách", "Nhà xuất bản", "Tên tác giả", "Năm xuất bản", "Giá sách",
-			"Thể loại", "Ngôn ngữ" };
+			"Thể loại", "Ngôn ngữ", "Trạng thái"};
 	private JTable table;
 	final JFileChooser fileDialog = new JFileChooser();
 	private String exFile;
@@ -285,11 +285,14 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		ResultSet rs = null;
 		rs = myConn.getDataID("Sach", "idSach", Cot, muonTim);
 
-		String arr[] = new String[8];
+		String arr[] = new String[titleCol.length];
 		try {
 			while (rs.next()) {
 				for (int i = 0; i < arr.length; i++) {
-					arr[i] = rs.getString(i + 1);
+					if(i < titleCol.length - 1)
+						arr[i] = rs.getString(i + 1);
+					else 
+						arr[i] = rs.getInt(i + 1) + "";
 				}
 				model.addRow(arr);
 			}
@@ -461,6 +464,79 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		return arr;
 	}
 
+	private void nhapFile() {
+		imp = new ImportFile();
+		int returnVal = fileDialog.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String path = fileDialog.getCurrentDirectory().toString() + "\\"
+					+ fileDialog.getSelectedFile().getName();
+			System.out.println(path);
+			try {
+				imp.importFileBook(path, myConn);
+				loadData("All", "");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			System.out.println("\ncanceled.");
+			return;
+		}
+	}
+	
+	private void xuatFile() {
+		ef = new ExportFile();
+		int returnVal = fileDialog.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String path = fileDialog.getCurrentDirectory().toString() + "\\"
+					+ fileDialog.getSelectedFile().getName();
+			if (path.indexOf(".docx") >= 0) {
+				exFile = path;
+			} else {
+				exFile = path + ".docx";
+			}
+			System.out.println(exFile);
+		} else {
+			System.out.println("\ncanceled.");
+			return;
+		}
+
+		XWPFDocument doc = new XWPFDocument();
+		try {
+			String infoS = "";
+			String search = "";
+			if (table.getModel().getColumnCount() > 3) {
+				infoS = "Thông Tin Sách";
+				if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("ALL")) {
+					search = "";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("idSach")) {
+					search = "Tìm Kiếm Theo Mã Sách";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenSach")) {
+					search = "Tìm Kiếm Theo Tên Sách";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NhaXB")) {
+					search = "Tìm Kiếm Theo Nhà Xuất Bản";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenTG")) {
+					search = "Tìm Kiếm Theo Tên Tác Giả";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NamXB")) {
+					search = "Tìm Kiếm Theo Năm Xuất Bản";
+				}
+			} else {
+				infoS = "Thống Kê Sách Theo " + table.getModel().getColumnName(1);
+			}
+			ef.printHeader(exFile, doc, infoS, search);
+			ef.printContentS(exFile, doc, table);
+			ef.printEnd(exFile, doc);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InvalidFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnThem) {
@@ -489,77 +565,12 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 			return;
 		}
 		if (e.getSource() == btnNhapFile) {
-			imp = new ImportFile();
-			int returnVal = fileDialog.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fileDialog.getCurrentDirectory().toString() + "\\"
-						+ fileDialog.getSelectedFile().getName();
-				System.out.println(path);
-				try {
-					imp.importFileBook(path, myConn);
-					loadData("All", "");
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			} else {
-				System.out.println("\ncanceled.");
-				return;
-			}
-
+			nhapFile();
 			return;
 		}
 		if (e.getSource() == btnXuatFile) {
-			ef = new ExportFile();
-			int returnVal = fileDialog.showSaveDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fileDialog.getCurrentDirectory().toString() + "\\"
-						+ fileDialog.getSelectedFile().getName();
-				if (path.indexOf(".docx") >= 0) {
-					exFile = path;
-				} else {
-					exFile = path + ".docx";
-				}
-				System.out.println(exFile);
-			} else {
-				System.out.println("\ncanceled.");
-				return;
-			}
-
-			XWPFDocument doc = new XWPFDocument();
-			try {
-				String infoS = "";
-				String search = "";
-				if (table.getModel().getColumnCount() > 3) {
-					infoS = "Thông Tin Sách";
-					if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("ALL")) {
-						search = "";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("idSach")) {
-						search = "Tìm Kiếm Theo Mã Sách";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenSach")) {
-						search = "Tìm Kiếm Theo Tên Sách";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NhaXB")) {
-						search = "Tìm Kiếm Theo Nhà Xuất Bản";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenTG")) {
-						search = "Tìm Kiếm Theo Tên Tác Giả";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NamXB")) {
-						search = "Tìm Kiếm Theo Năm Xuất Bản";
-					}
-				} else {
-					infoS = "Thống Kê Sách Theo " + table.getModel().getColumnName(1);
-				}
-				ef.printHeader(exFile, doc, infoS, search);
-				ef.printContentS(exFile, doc, table);
-				ef.printEnd(exFile, doc);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvalidFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (URISyntaxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			xuatFile();
+			return;
 		}
 	}
 
@@ -642,6 +653,10 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public JTable getTable() {
+		return table;
 	}
 
 }

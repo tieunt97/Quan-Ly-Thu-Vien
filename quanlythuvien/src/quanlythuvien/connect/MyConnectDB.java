@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import org.w3.x2000.x09.xmldsig.TransformDocument;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
@@ -382,6 +384,31 @@ public class MyConnectDB {
 			System.out.println("update error" + e);
 			return false;
 		}
+	}
+	
+	public boolean updateTTSach(String idSach, int trangThai) {
+		String qSql = "update Sach set TrangThai = ? where idSach = ?";
+		PreparedStatement ps = null;
+		try {
+			ps = (PreparedStatement) conn.prepareStatement(qSql);
+			ps.setInt(1, trangThai);
+			ps.setString(2, idSach);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if(ps.executeUpdate() > 0) {
+				System.out.println("\n update TrangThai success.");
+				return true;
+			}else return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+//			System.out.println("\n update TrangThai error.");
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 	
 	public boolean insertTK(TaiKhoan tk) {

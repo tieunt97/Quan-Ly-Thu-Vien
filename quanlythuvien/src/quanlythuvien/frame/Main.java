@@ -44,7 +44,7 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Quản Lý Độc Giả", new ImageIcon(this.getClass().getResource("/per1.png")), qlDG);
 		qlNV = new QuanLyNhanVien(myConn);
 		tabbedPane.addTab("Quản Lý Nhân Viên", new ImageIcon(this.getClass().getResource("/per.png")), qlNV);
-		qlMT = new QuanLyMuonTra(myConn);
+		qlMT = new QuanLyMuonTra(myConn, qlS.getTable());
 		tabbedPane.addTab("Quản Lý Mượn Trả", new ImageIcon(this.getClass().getResource("/book1.png")), qlMT);
 
 		return tabbedPane;

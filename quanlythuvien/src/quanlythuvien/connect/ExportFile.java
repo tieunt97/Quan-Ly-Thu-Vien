@@ -347,16 +347,16 @@ public class ExportFile {
 		fout.close();
 	}
 	
-	public void printContentPhieuMT(String path, XWPFDocument doc, JTable table, int row, MyConnectDB connDB) throws IOException, SQLException {
-		if(table == null || row < 0) {
+	public void printContentPhieuMT(String path, XWPFDocument doc, String[] muonTra, MyConnectDB connDB) throws IOException, SQLException {
+		if(muonTra == null) {
 			return;
 		}
-		String idMuonTra = (String) table.getValueAt(row, 0);
-		String idDocGia = (String) table.getValueAt(row, 1);
-		String idNhanVien = (String) table.getValueAt(row, 2);
-		String ngayMuon = (String) table.getValueAt(row, 3);
-		String ngayHenTra = (String) table.getValueAt(row, 4);
-		String datCoc = (String) table.getValueAt(row, 5);
+		String idMuonTra = muonTra[0];
+		String idDocGia = muonTra[1];
+		String idNhanVien = muonTra[2];
+		String ngayMuon = muonTra[3];
+		String ngayHenTra = muonTra[4];
+		String datCoc = muonTra[5];
 		String tenDG = "", tenNV = "";
 		
 		XWPFParagraph par = doc.createParagraph();

@@ -210,9 +210,9 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 	}
 
 	private JPanel createtfTKTKPanel() {
-		JPanel panel = new JPanel(new GridLayout(2, 1, 10, 15));
+		JPanel panel = new JPanel(new GridLayout(2, 1, 5, 15));
+		panel.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panel.setBackground(color);
-		panel.setBorder(new EmptyBorder(0, 5, 24, 0));
 		tfTimKiem = new JTextField();
 		panel.add(tfTimKiem);
 
@@ -472,6 +472,79 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 		return arr;
 	}
 
+	private void nhapFile() {
+		imp = new ImportFile();
+		int returnVal = fileDialog.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String path = fileDialog.getCurrentDirectory().toString() + "\\"
+					+ fileDialog.getSelectedFile().getName();
+			try {
+				imp.importFileNV(path, myConn);
+				loadData("All", "");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} else {
+			System.out.println("\ncanceled.");
+			return;
+		}
+	}
+	
+	private void xuatFile() {
+		ef = new ExportFile();
+		int returnVal = fileDialog.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String path = fileDialog.getCurrentDirectory().toString() + "\\"
+					+ fileDialog.getSelectedFile().getName();
+			if (path.indexOf(".docx") >= 0) {
+				exFile = path;
+			} else {
+				exFile = path + ".docx";
+			}
+			System.out.println(exFile);
+		} else {
+			System.out.println("\ncanceled.");
+			return;
+		}
+
+		XWPFDocument doc = new XWPFDocument();
+		try {
+			String infoNV = "";
+			String search = "";
+			if (table.getModel().getColumnCount() > 3) {
+				infoNV = "Thông Tin Nhân Viên";
+				if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("ALL")) {
+					search = "";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("idNhanVien")) {
+					search = "Tìm Kiếm Theo Mã Nhân Viên";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenNV")) {
+					search = "Tìm Kiếm Theo Tên Nhân Viên";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NgaySinh")) {
+					search = "Tìm Kiếm Theo Ngày Sinh";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("DiaChi")) {
+					search = "Tìm Kiếm Theo Địa Chỉ";
+				} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("GioiTinh")) {
+					search = "Tìm Kiếm Theo Giới Tính";
+				}
+			} else {
+				infoNV = "Thống Kê Nhân Viên Theo " + table.getModel().getColumnName(1);
+			}
+			ef.printHeader(exFile, doc, infoNV, search);
+			ef.printContentNV(exFile, doc, table);
+			ef.printEnd(exFile, doc);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InvalidFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnThem) {
@@ -500,77 +573,12 @@ public class QuanLyNhanVien extends JPanel implements ActionListener, MouseListe
 			return;
 		}
 		if (e.getSource() == btnThemFile) {
-			imp = new ImportFile();
-			int returnVal = fileDialog.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fileDialog.getCurrentDirectory().toString() + "\\"
-						+ fileDialog.getSelectedFile().getName();
-				try {
-					imp.importFileNV(path, myConn);
-					loadData("All", "");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			} else {
-				System.out.println("\ncanceled.");
-				return;
-			}
-
+			nhapFile();
 			return;
 		}
 		if (e.getSource() == btnXuatFile) {
-			ef = new ExportFile();
-			int returnVal = fileDialog.showSaveDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fileDialog.getCurrentDirectory().toString() + "\\"
-						+ fileDialog.getSelectedFile().getName();
-				if (path.indexOf(".docx") >= 0) {
-					exFile = path;
-				} else {
-					exFile = path + ".docx";
-				}
-				System.out.println(exFile);
-			} else {
-				System.out.println("\ncanceled.");
-				return;
-			}
-
-			XWPFDocument doc = new XWPFDocument();
-			try {
-				String infoNV = "";
-				String search = "";
-				if (table.getModel().getColumnCount() > 3) {
-					infoNV = "Thông Tin Nhân Viên";
-					if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("ALL")) {
-						search = "";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("idNhanVien")) {
-						search = "Tìm Kiếm Theo Mã Nhân Viên";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("TenNV")) {
-						search = "Tìm Kiếm Theo Tên Nhân Viên";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("NgaySinh")) {
-						search = "Tìm Kiếm Theo Ngày Sinh";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("DiaChi")) {
-						search = "Tìm Kiếm Theo Địa Chỉ";
-					} else if (timKiemCB.getSelectedItem().toString().equalsIgnoreCase("GioiTinh")) {
-						search = "Tìm Kiếm Theo Giới Tính";
-					}
-				} else {
-					infoNV = "Thống Kê Nhân Viên Theo " + table.getModel().getColumnName(1);
-				}
-				ef.printHeader(exFile, doc, infoNV, search);
-				ef.printContentNV(exFile, doc, table);
-				ef.printEnd(exFile, doc);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvalidFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (URISyntaxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			xuatFile();
+			return;
 		}
 	}
 

@@ -45,7 +45,7 @@ public class MainNhanVien extends JFrame {
 		tabbedPane.addTab("Quản Lý Sách", new ImageIcon(this.getClass().getResource("/book.png")), qlSach);
 		qlDG = new QuanLyDocGia(myConn);
 		tabbedPane.addTab("Quản Lý Độc Giả", new ImageIcon(this.getClass().getResource("/per1.png")), qlDG);
-		qlMT = new QuanLyMuonTra(myConn);
+		qlMT = new QuanLyMuonTra(myConn, qlSach.getTable());
 		tabbedPane.addTab("Quản Lý Mượn Trả", new ImageIcon(this.getClass().getResource("/book1.png")), qlMT);
 		qlTK = new ThemTKDocGia(myConn, "dg");
 		tabbedPane.addTab("Quản lý tài khoản ĐG", new ImageIcon(this.getClass().getResource("/account.png")), qlTK);

@@ -146,7 +146,7 @@ public class Check {
 		    			}
 		    			
 		    			Cmonth = (Cmonth > 0 && dayT < dayHT)?(Cmonth - 1): Cmonth;
-		    			System.out.println("subdate" +subDate);
+//		    			System.out.println("subdate" +subDate);
 		    			if(subDate >= 300) return (int) (datCoc*(Cmonth*0.15 + day*0.0048));
 		    			else return -2;
 		    		}

@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -194,6 +195,7 @@ public class LoginQLTV extends JFrame {
 			} else if (loaiTK.equalsIgnoreCase("main")) {
 				main = new Main(myConn);
 			}
+			setVisible(false);
 			btnDangXuat.addActionListener(new ActionListener() {
 
 				@Override
@@ -209,7 +211,6 @@ public class LoginQLTV extends JFrame {
 					setVisible(true);
 				}
 			});
-			setVisible(false);
 		} else {
 			JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu sai", "Error", JOptionPane.ERROR_MESSAGE,
 					null);
