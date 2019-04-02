@@ -85,7 +85,6 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 		JLabel label = new JLabel(title);
 		label.setFont(new Font("Caribli", Font.BOLD, 18));
 		label.setForeground(Color.YELLOW);
-		;
 		panel.add(label);
 		panel.setBackground(color);
 

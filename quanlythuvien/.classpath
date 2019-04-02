@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="images"/>
-	<classpathentry kind="lib" path="D:/MySQL/mysql-connector-java-5.1.33/mysql-connector-java-5.1.33-bin.jar"/>
-	<classpathentry kind="lib" path="D:/ThuVien/poi-3.17/poi-3.17.jar"/>
-	<classpathentry kind="lib" path="D:/ThuVien/poi-3.17/poi-ooxml-3.17.jar"/>
-	<classpathentry kind="lib" path="D:/ThuVien/poi-3.17/poi-ooxml-schemas-3.17.jar"/>
-	<classpathentry kind="lib" path="D:/ThuVien/poi-3.17/ooxml-lib/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="lib" path="D:/ThuVien/poi-3.17/lib/commons-collections4-4.1.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="images">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

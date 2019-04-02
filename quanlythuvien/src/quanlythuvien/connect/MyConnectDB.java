@@ -228,7 +228,7 @@ public class MyConnectDB {
 	public boolean insert(String table, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
 		String qSql = "";
 		if(table.equals("Sach")) {
-			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?, ?)";
+			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		}
 		if(table.equals("DocGia")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?)";
@@ -257,6 +257,7 @@ public class MyConnectDB {
 				ps.setInt(6, s.getGiaSach());
 				ps.setString(7, s.getTheLoai());
 				ps.setString(8, s.getNgonNgu());
+				ps.setInt(9, s.getTrangThai());
 			}
 			if(table.equals("DocGia")) {
 				ps.setString(1, dg.getIdDocGia());
@@ -299,7 +300,8 @@ public class MyConnectDB {
 				System.out.println("insert error");
 				return false;
 		} catch (SQLException e) {
-			System.out.println("insert error" + e);
+//			System.out.println("insert error" + e);
+			e.printStackTrace();
 //			JOptionPane.showMessageDialog(null, "Trùng mã hoặc có trường dữ liệu trống", "Error insert", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
