@@ -302,7 +302,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		};
 		model.setColumnIdentifiers(titleCol);
 
-		ResultSet rs = myConn.getDataID("DocGia", "idDocGia", Cot, muonTim);
+		ResultSet rs = myConn.getDataID("docgia", "idDocGia", Cot, muonTim);
 		String arr[] = new String[7];
 		try {
 			while (rs.next()) {
@@ -342,7 +342,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		String[] titleVar = { "TT", str[1], "Số lượng" };
 		model.setColumnIdentifiers(titleVar);
 		ResultSet rs = null;
-		rs = myConn.getVar("DocGia", "idDocGia", str[0]);
+		rs = myConn.getVar("docgia", "idDocGia", str[0]);
 
 		String arr[] = new String[3];
 
@@ -403,7 +403,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 			if(!checkTTinDG(dg)) {
 				return;
 			}
-			boolean ck = myConn.insert("DocGia", null, dg, null, null, null);
+			boolean ck = myConn.insert("docgia", null, dg, null, null, null);
 			if (ck) {
 				loadData("All", "");
 				JOptionPane.showMessageDialog(null, "Thêm thành công");
@@ -445,7 +445,7 @@ public class QuanLyDocGia extends JPanel implements ActionListener, MouseListene
 		int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa không?", "Delete",
 				JOptionPane.YES_NO_OPTION);
 		if (select == 0) {
-			boolean ck = myConn.deleteIDRef("DocGia", "idDocGia", (String) table.getValueAt(row, 0));
+			boolean ck = myConn.deleteIDRef("docgia", "idDocGia", (String) table.getValueAt(row, 0));
 			loadData("All", "");
 			if (ck) {
 				JOptionPane.showMessageDialog(null, "Xóa thành công");

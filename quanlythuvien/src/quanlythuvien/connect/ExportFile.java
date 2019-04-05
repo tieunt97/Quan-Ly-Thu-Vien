@@ -362,13 +362,13 @@ public class ExportFile {
 		
 		run.setText("                               Mã Mượn Trả:    " + idMuonTra);
 		run.addBreak();
-		ResultSet rs = connDB.getNames("DocGia", "tenDG", "idDocGia", idDocGia);
+		ResultSet rs = connDB.getNames("docgia", "tenDG", "idDocGia", idDocGia);
 		while(rs.next()) {
 			tenDG = rs.getString(1);
 		}
 		run.setText("                               Mã Độc Giả:        " + idDocGia + "                         Tên Độc Giả:       " + tenDG);
 		run.addBreak();
-		ResultSet rs1 = connDB.getNames("NhanVien", "tenNV", "idNhanVien", idNhanVien);
+		ResultSet rs1 = connDB.getNames("nhanvien", "tenNV", "idNhanVien", idNhanVien);
 		while(rs1.next()) {
 			tenNV = rs1.getString(1);
 		}

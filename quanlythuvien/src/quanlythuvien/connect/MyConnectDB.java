@@ -102,7 +102,7 @@ public class MyConnectDB {
 	public ResultSet getContentTablePhieuMT(String idMT) {
 		ResultSet rs = null;
 		String qSql = "select CTMT.idMuonTra, CTMT.idSach, S.tenSach, CTMT.ngayTra, CTMT.tienPhat " + 
-				"from ChiTietMuonTra CTMT, Sach S " + 
+				"from chitietmuontra CTMT, sach S " + 
 				"where CTMT.idSach = S.idSach and CTMT.idMuonTra = ?";
 		
 		PreparedStatement ps;
@@ -137,9 +137,9 @@ public class MyConnectDB {
 		ResultSet rs = null;
 		String qSql = null;
 		if(sum.equals("")) {
-			qSql = "select " + muonThongKe + ", sum(DatCoc) from MuonTra group by " + muonThongKe; 
+			qSql = "select " + muonThongKe + ", sum(DatCoc) from muontra group by " + muonThongKe; 
 		}else {
-			qSql = "select " + muonThongKe + ", sum(TienPhat) from MuonTra natural join ChiTietMuonTra group by " + muonThongKe;
+			qSql = "select " + muonThongKe + ", sum(TienPhat) from muontra natural join chitietmuontra group by " + muonThongKe;
 		}
 		Statement stmt;
 		try {
@@ -175,7 +175,7 @@ public class MyConnectDB {
 	}
 	
 	public boolean deleteCTMT(String idMT, String idS) {
-		String qSql = "delete from ChiTietMuonTra where idMuonTra = ? and idSach = ?";
+		String qSql = "delete from chitietmuontra where idMuonTra = ? and idSach = ?";
 		PreparedStatement ps = null;
 		try {
 			ps = (PreparedStatement) conn.prepareStatement(qSql);
@@ -198,11 +198,11 @@ public class MyConnectDB {
 	
 	public boolean deleteIDRef(String table, String idT, String id) {
 		if(table.equalsIgnoreCase("MuonTra")) {
-			deleteID("ChiTietMuonTra", idT, id);
+			deleteID("chitietmuontra", idT, id);
 			deleteID(table, idT, id);
 			return true;
 		}else if(table.equalsIgnoreCase("NhanVien") || table.equalsIgnoreCase("DocGia")){
-			String qSql = "select idMuonTra from MuonTra, " + table + " where MuonTra." + idT + " = " + table + "." + idT + " and MuonTra." + idT + " = ?";
+			String qSql = "select idMuonTra from muontra, " + table + " where muontra." + idT + " = " + table + "." + idT + " and muontra." + idT + " = ?";
 			PreparedStatement ps;
 			ResultSet rs = null;
 			try {
@@ -211,8 +211,8 @@ public class MyConnectDB {
 				rs = ps.executeQuery();
 				while(rs.next()) {
 					String id1 = rs.getString(1);
-					deleteID("ChiTietMuonTra", "idMuonTra", id1);
-					deleteID("MuonTra", "idMuonTra", id1);
+					deleteID("chitietmuontra", "idMuonTra", id1);
+					deleteID("muontra", "idMuonTra", id1);
 				}
 				deleteID(table, idT, id);
 				return true;
@@ -226,20 +226,21 @@ public class MyConnectDB {
 	}
 	
 	public boolean insert(String table, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
+		System.out.println("table: " + table);
 		String qSql = "";
-		if(table.equals("Sach")) {
+		if(table.equals("sach")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		}
-		if(table.equals("DocGia")) {
+		if(table.equals("docgia")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?, ?)";
 		}
-		if(table.equals("NhanVien")) {
+		if(table.equals("nhanvien")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?)";
 		}
-		if(table.equals("MuonTra")) {
+		if(table.equals("muontra")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?, ?, ?)";
 		}
-		if(table.equals("ChiTietMuonTra")) {
+		if(table.equals("chitietmuontra")) {
 			qSql = "insert into " + table + " values(?, ?, ?, ?)";
 		}
 		
@@ -248,7 +249,7 @@ public class MyConnectDB {
 		try {
 			
 			ps = (PreparedStatement) conn.prepareStatement(qSql);
-			if(table.equals("Sach")) {
+			if(table.equals("sach")) {
 				ps.setString(1, s.getIdSach());
 				ps.setString(2, s.getTenSach());
 				ps.setString(3, s.getNhaXB());
@@ -259,7 +260,7 @@ public class MyConnectDB {
 				ps.setString(8, s.getNgonNgu());
 				ps.setInt(9, s.getTrangThai());
 			}
-			if(table.equals("DocGia")) {
+			if(table.equals("docgia")) {
 				ps.setString(1, dg.getIdDocGia());
 				ps.setString(2, dg.getTenDG());
 				ps.setString(3, dg.getNgaySinh());
@@ -268,7 +269,7 @@ public class MyConnectDB {
 				ps.setString(6, dg.getSoDT());
 				ps.setString(7, dg.getDiaChi());
 			}
-			if(table.equals("NhanVien")) {
+			if(table.equals("nhanvien")) {
 				ps.setString(1, nv.getIdNhanVien());
 				ps.setString(2, nv.getTenNV());
 				ps.setString(3, nv.getNgaySinh());
@@ -276,7 +277,7 @@ public class MyConnectDB {
 				ps.setString(5, nv.getDiaChi());
 				ps.setString(6, nv.getSoDT());
 			}
-			if(table.equals("MuonTra")) {
+			if(table.equals("muontra")) {
 				ps.setString(1, mt.getIdMuonTra());
 				ps.setString(2, mt.getIdDocGia());
 				ps.setString(3, mt.getIdNhanVien());
@@ -284,7 +285,7 @@ public class MyConnectDB {
 				ps.setString(5, mt.getNgayHenTra());
 				ps.setInt(6, mt.getDatCoc());
 			}
-			if(table.equals("ChiTietMuonTra")) {
+			if(table.equals("chitietmuontra")) {
 				ps.setString(1, ctmt.getIdMuonTra());
 				ps.setString(2, ctmt.getIdSach());
 				ps.setString(3, ctmt.getNgayTra());
@@ -310,19 +311,19 @@ public class MyConnectDB {
 	public boolean update(String id, Sach s, DocGia dg, NhanVien nv, MuonTra mt, ChiTietMuonTra ctmt) {
 		String qSql = "";
 		if(s != null) {
-			qSql = "update Sach set TenSach = ?, NhaXB = ?, TenTG = ?, NamXB = ?, GiaSach = ?, TheLoai = ?, NgonNgu = ? where idSach = ?";
+			qSql = "update sach set TenSach = ?, NhaXB = ?, TenTG = ?, NamXB = ?, GiaSach = ?, TheLoai = ?, NgonNgu = ? where idSach = ?";
 		}
 		if(dg != null) {
-			qSql = "update DocGia set TenDG = ?, NgaySinh = ?, GioiTinh = ?, Email = ?, SoDT = ?, DiaChi = ? where idDocGia = ?";
+			qSql = "update docgia set TenDG = ?, NgaySinh = ?, GioiTinh = ?, Email = ?, SoDT = ?, DiaChi = ? where idDocGia = ?";
 		}
 		if(nv != null) {
-			qSql = "update NhanVien set TenNV = ?, NgaySinh = ?, GioiTinh = ?, DiaChi = ?, SoDT = ? where idNhanVien = ?";
+			qSql = "update nhanvien set TenNV = ?, NgaySinh = ?, GioiTinh = ?, DiaChi = ?, SoDT = ? where idNhanVien = ?";
 		}
 		if(mt != null) {
-			qSql = "update MuonTra set idDocGia = ?, idNhanVien = ?, NgayMuon = ?, NgayHenTra = ?, DatCoc = ? where idMuonTra = ?";
+			qSql = "update muontra set idDocGia = ?, idNhanVien = ?, NgayMuon = ?, NgayHenTra = ?, DatCoc = ? where idMuonTra = ?";
 		}
 		if(ctmt != null) {
-			qSql = "update ChiTietMuonTra set NgayTra = ?, TienPhat = ? where idMuonTra = ? and idSach = ?";
+			qSql = "update chitietmuontra set NgayTra = ?, TienPhat = ? where idMuonTra = ? and idSach = ?";
 		}
 		PreparedStatement ps = null;
 		
@@ -389,7 +390,7 @@ public class MyConnectDB {
 	}
 	
 	public boolean updateTTSach(String idSach, int trangThai) {
-		String qSql = "update Sach set TrangThai = ? where idSach = ?";
+		String qSql = "update sach set TrangThai = ? where idSach = ?";
 		PreparedStatement ps = null;
 		try {
 			ps = (PreparedStatement) conn.prepareStatement(qSql);
@@ -414,7 +415,7 @@ public class MyConnectDB {
 	}
 	
 	public boolean insertTK(TaiKhoan tk) {
-		String qSql = "insert into TaiKhoan values(?, ?, ?)";
+		String qSql = "insert into taikhoan values(?, ?, ?)";
 		PreparedStatement ps = null;
 		try {
 			ps = (PreparedStatement) conn.prepareStatement(qSql);
@@ -438,7 +439,7 @@ public class MyConnectDB {
 	}
 	
 	public boolean updateTK(String idTaiKhoan, TaiKhoan tk) {
-		String qSql = "update TaiKhoan set passWord = ? where idTaiKhoan = ?";
+		String qSql = "update taikhoan set passWord = ? where idTaiKhoan = ?";
 		PreparedStatement ps = null;
 		try {
 			ps = (PreparedStatement) conn.prepareStatement(qSql);

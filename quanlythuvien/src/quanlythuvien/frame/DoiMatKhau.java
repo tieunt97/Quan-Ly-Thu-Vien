@@ -110,7 +110,7 @@ public class DoiMatKhau extends JPanel implements ActionListener {
 		panel.setBackground(new Color(0x009999));
 		String ten = "";
 		if (loaiTK.equalsIgnoreCase("nv")) {
-			ResultSet rs = myConn.getNames("NhanVien", "tenNV", "idNhanVien", tenTK);
+			ResultSet rs = myConn.getNames("nhanvien", "tenNV", "idNhanVien", tenTK);
 			try {
 				if (rs.next())
 					ten = rs.getString(1);
@@ -119,7 +119,7 @@ public class DoiMatKhau extends JPanel implements ActionListener {
 				e.printStackTrace();
 			}
 		} else if (loaiTK.equalsIgnoreCase("dg")) {
-			ResultSet rs = myConn.getNames("DocGia", "tenDG", "idDocGia", tenTK);
+			ResultSet rs = myConn.getNames("docgia", "tenDG", "idDocGia", tenTK);
 			try {
 				if (rs.next())
 					ten = rs.getString(1);
@@ -167,7 +167,7 @@ public class DoiMatKhau extends JPanel implements ActionListener {
 		String mkMoiXN = xacNhanPW.getText().trim();
 		String mk1 = "";
 
-		ResultSet rs = myConn.getNames("TaiKhoan", "passWord", "idTaiKhoan", tfTenTK.getText().trim());
+		ResultSet rs = myConn.getNames("taikhoan", "passWord", "idTaiKhoan", tfTenTK.getText().trim());
 		try {
 			if (rs.next()) {
 				mk1 = rs.getString(1);

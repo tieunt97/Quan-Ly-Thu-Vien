@@ -193,18 +193,18 @@ public class DangKy extends JDialog {
 						TaiKhoan tk = getTaiKhoan();
 						try {
 							if (dg != null && tk != null) {
-								boolean ck = DangKy.this.myConn.insert("DocGia", null, dg, null, null, null);
+								boolean ck = DangKy.this.myConn.insert("docgia", null, dg, null, null, null);
 								boolean ck1 = DangKy.this.myConn.insertTK(tk);
 								if(ck && ck1) {
 									JOptionPane.showMessageDialog(null, "Thêm tài khoản thành công");
 									cancel();
 									return;
 								}else if(ck && !ck1) {
-									DangKy.this.myConn.deleteID("DocGia", "idDocGia", dg.getIdDocGia());
+									DangKy.this.myConn.deleteID("docgia", "idDocGia", dg.getIdDocGia());
 									JOptionPane.showMessageDialog(null, "Trùng tên tài khoản", "Error", JOptionPane.ERROR_MESSAGE);
 									return;
 								}else if(!ck && ck1) {
-									DangKy.this.myConn.deleteID("TaiKhoan", "idTaiKhoan", tk.getTenTK());
+									DangKy.this.myConn.deleteID("taikhoan", "idTaiKhoan", tk.getTenTK());
 									JOptionPane.showMessageDialog(null, "Trùng tên tài khoản", "Error", JOptionPane.ERROR_MESSAGE);
 									return;
 								}else {

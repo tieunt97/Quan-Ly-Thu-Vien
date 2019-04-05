@@ -283,7 +283,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		};
 		model.setColumnIdentifiers(titleCol);
 		ResultSet rs = null;
-		rs = myConn.getDataID("Sach", "idSach", Cot, muonTim);
+		rs = myConn.getDataID("sach", "idSach", Cot, muonTim);
 
 		String arr[] = new String[titleCol.length];
 		try {
@@ -331,7 +331,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		String[] titleVar = { "TT", str[1], "Số lượng" };
 		model.setColumnIdentifiers(titleVar);
 		ResultSet rs = null;
-		rs = myConn.getVar("Sach", "idSach", str[0]);
+		rs = myConn.getVar("sach", "idSach", str[0]);
 		String arr[] = new String[3];
 
 		try {
@@ -390,7 +390,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		Sach s = getSach();
 		if (s != null) {
 			if(!checkTTinSach(s)) return;
-			boolean ck = myConn.insert("Sach", s, null, null, null, null);
+			boolean ck = myConn.insert("sach", s, null, null, null, null);
 			if (ck) {
 				loadData("All", "");
 				JOptionPane.showMessageDialog(null, "Thêm thành công.");
@@ -430,7 +430,7 @@ public class QuanLySach extends JPanel implements ActionListener, MouseListener 
 		int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa không?", "Delete",
 				JOptionPane.YES_NO_OPTION);
 		if (select == 0) {
-			boolean ck = myConn.deleteID("Sach", "idSach", (String) table.getValueAt(row, 0));
+			boolean ck = myConn.deleteID("sach", "idSach", (String) table.getValueAt(row, 0));
 			loadData("All", "");
 			if (ck) {
 				JOptionPane.showMessageDialog(null, "Xóa thành công");

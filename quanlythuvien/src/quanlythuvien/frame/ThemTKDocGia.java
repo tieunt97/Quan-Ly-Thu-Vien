@@ -172,7 +172,7 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 		};
 		model.setColumnIdentifiers(titleCols);
 		ResultSet rs = null;
-		rs = myConn.getDataID("TaiKhoan", "idTaiKhoan", Cot, muonTim);
+		rs = myConn.getDataID("taikhoan", "idTaiKhoan", Cot, muonTim);
 
 		String arr[] = new String[3];
 		try {
@@ -248,7 +248,7 @@ public class ThemTKDocGia extends JPanel implements ActionListener, MouseListene
 		int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa không?", "Delete",
 				JOptionPane.YES_NO_OPTION);
 		if (select == 0) {
-			boolean ck = myConn.deleteID("TaiKhoan", "idTaiKhoan", (String) table.getValueAt(row, 0));
+			boolean ck = myConn.deleteID("taikhoan", "idTaiKhoan", (String) table.getValueAt(row, 0));
 			loadData("All", "", loaiTK);
 			if (ck)
 				JOptionPane.showMessageDialog(null, "Xóa thành công");

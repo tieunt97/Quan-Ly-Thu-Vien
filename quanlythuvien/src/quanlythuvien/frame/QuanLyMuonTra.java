@@ -133,7 +133,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 	private JComboBox<String> createCBBoxID(String table) {
 		JComboBox<String> cb = new JComboBox<String>();
 		if (table.equals("NhanVien")) {
-			ResultSet rs = myConn.getID("NhanVien", "idNhanVien");
+			ResultSet rs = myConn.getID("nhanvien", "idNhanVien");
 			try {
 				while (rs.next()) {
 					cb.addItem(rs.getString(1));
@@ -143,7 +143,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 			}
 		}
 		if (table.equals("DocGia")) {
-			ResultSet rs = myConn.getID("DocGia", "idDocGia");
+			ResultSet rs = myConn.getID("docgia", "idDocGia");
 			try {
 				while (rs.next()) {
 					cb.addItem(rs.getString(1));
@@ -339,7 +339,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 			}
 		};
 
-		ResultSet rs = myConn.getDataID("MuonTra", "idMuonTra", Cot, muonTim);
+		ResultSet rs = myConn.getDataID("muontra", "idMuonTra", Cot, muonTim);
 		String arr[] = new String[titleCol.length];
 		try {
 			while (rs.next()) {
@@ -413,7 +413,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 		} else {
 			String[] titleVar = { "TT", str[1], "Số lượng" };
 			model.setColumnIdentifiers(titleVar);
-			rs = myConn.getVar("MuonTra", "idMuonTra", str[0]);
+			rs = myConn.getVar("muontra", "idMuonTra", str[0]);
 		}
 
 		String arr[] = new String[3];
@@ -482,7 +482,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 		if (mt != null) {
 			if (!checkMT(mt))
 				return;
-			boolean ck = myConn.insert("MuonTra", null, null, null, mt, null);
+			boolean ck = myConn.insert("muontra", null, null, null, mt, null);
 			if (ck) {
 				loadData("All", "");
 				JOptionPane.showMessageDialog(null, "Thêm mượn trả thành công");
@@ -525,7 +525,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 				JOptionPane.YES_NO_OPTION);
 		if (select == 0) {
 			boolean ck = false;
-			ck = myConn.deleteIDRef("MuonTra", "idMuonTra", (String) table.getValueAt(row, 0));
+			ck = myConn.deleteIDRef("muontra", "idMuonTra", (String) table.getValueAt(row, 0));
 			if (ck) {
 				loadData("All", "");
 				JOptionPane.showMessageDialog(null, "Xóa thành công");
@@ -551,7 +551,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 
 	private void changeLabel(String name, int choose) {
 		if (choose == 1) {
-			ResultSet rs = myConn.getNames("DocGia", "tenDG", "idDocGia", name);
+			ResultSet rs = myConn.getNames("docgia", "tenDG", "idDocGia", name);
 			try {
 				while (rs.next()) {
 					labTenDG.setText(rs.getString(1));
@@ -561,7 +561,7 @@ public class QuanLyMuonTra extends JPanel implements ActionListener, MouseListen
 				e.printStackTrace();
 			}
 		} else {
-			ResultSet rs = myConn.getNames("NhanVien", "tenNV", "idNhanVien", name);
+			ResultSet rs = myConn.getNames("nhanvien", "tenNV", "idNhanVien", name);
 			try {
 				while (rs.next()) {
 					labTenNV.setText(rs.getString(1));

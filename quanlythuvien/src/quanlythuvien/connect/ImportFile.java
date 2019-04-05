@@ -59,7 +59,7 @@ public class ImportFile {
             System.out.println("độ rộng: " + dataBook.size());
             Sach s = new Sach(dataBook.get(0).toUpperCase(), dataBook.get(1), dataBook.get(2), dataBook.get(3),
             		dataBook.get(4), Integer.parseInt(dataBook.get(5)), dataBook.get(6), dataBook.get(7));
-            if(conn.insert("Sach", s, null, null, null, null)) count++;
+            if(conn.insert("sach", s, null, null, null, null)) count++;
             else count1++;
             System.out.println();
         }
@@ -107,7 +107,7 @@ public class ImportFile {
 			DocGia dg = null;
 			try {
 				dg = new DocGia(dataDG.get(0).toUpperCase(), dataDG.get(1), dataDG.get(2), dataDG.get(3), dataDG.get(4), dataDG.get(5), dataDG.get(6));
-				if(conn.insert("DocGia", null, dg, null, null, null)) count++;
+				if(conn.insert("docgia", null, dg, null, null, null)) count++;
 				else count1++;
 			}catch(Exception exc) {
 				System.out.println("Error:" + exc);
@@ -153,7 +153,7 @@ public class ImportFile {
 			}
 			System.out.println("độ rộng: " + dataNV.size());
 			NhanVien nv = new NhanVien(dataNV.get(0), dataNV.get(1), dataNV.get(2), dataNV.get(3), dataNV.get(4), dataNV.get(5));
-			if(conn.insert("NhanVien", null, null, nv, null, null)) count++;
+			if(conn.insert("nhanvien", null, null, nv, null, null)) count++;
 			else count1++;
 			System.out.println();
 		}
@@ -197,7 +197,7 @@ public class ImportFile {
 			}
 			System.out.println("độ rộng: " + dataMT.size());
 			MuonTra mt = new MuonTra(dataMT.get(0), dataMT.get(1), dataMT.get(2), dataMT.get(3), dataMT.get(4), Integer.parseInt(dataMT.get(5)));
-			if(conn.insert("MuonTra", null, null, null, mt, null)) count++;
+			if(conn.insert("muontra", null, null, null, mt, null)) count++;
 			else count1++;
 			System.out.println();
 		}
@@ -233,7 +233,7 @@ public class ImportFile {
 			}
 			System.out.println("độ rộng: " + dataCTMT.size());
 			ChiTietMuonTra ctmt = new ChiTietMuonTra(dataCTMT.get(0), dataCTMT.get(1), dataCTMT.get(2), Integer.parseInt(dataCTMT.get(3)));
-			if(conn.insert("ChiTietMuonTra", null, null, null, null, ctmt)) count++;
+			if(conn.insert("chitietmuontra", null, null, null, null, ctmt)) count++;
 			else count1++;
 			System.out.println();
 		}

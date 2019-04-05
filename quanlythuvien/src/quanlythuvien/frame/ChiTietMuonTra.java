@@ -130,8 +130,8 @@ public class ChiTietMuonTra extends JDialog implements ActionListener {
 	private String[] getDeTail() {
 		String[] info = new String[3];
 		info[0] = muonTra[0];
-		ResultSet rs1 = myConn.getNames("DocGia", "tenDG", "idDocGia", muonTra[1]);
-		ResultSet rs2 = myConn.getNames("NhanVien", "tenNV", "idNhanVien", muonTra[2]);
+		ResultSet rs1 = myConn.getNames("docgia", "tenDG", "idDocGia", muonTra[1]);
+		ResultSet rs2 = myConn.getNames("nhanvien", "tenNV", "idNhanVien", muonTra[2]);
 		try {
 			if (rs1.next() && rs2.next())
 				info[1] = rs1.getString(1);
@@ -198,7 +198,7 @@ public class ChiTietMuonTra extends JDialog implements ActionListener {
 	private void loadData() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(titleCols);
-		ResultSet rs = myConn.getDataID("ChiTietMuonTra", "idMuonTra", "idMuonTra", muonTra[0]);
+		ResultSet rs = myConn.getDataID("chitietmuontra", "idMuonTra", "idMuonTra", muonTra[0]);
 		String arr2[] = new String[4];
 		try {
 			while (rs.next()) {
@@ -206,7 +206,7 @@ public class ChiTietMuonTra extends JDialog implements ActionListener {
 					if(i == 0) 
 						arr2[i] = rs.getString(2);
 					if(i == 1) {
-						ResultSet rs1 = myConn.getNames("Sach", "TenSach", "idSach", rs.getString(2));
+						ResultSet rs1 = myConn.getNames("sach", "TenSach", "idSach", rs.getString(2));
 						if(rs1.next()) arr2[i] = rs1.getString(1);
 					}
 					if (i > 1)
@@ -271,11 +271,11 @@ public class ChiTietMuonTra extends JDialog implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Mã sách trống!!!", "Warning", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		ResultSet rs = myConn.getNames("Sach", "TenSach", "idSach", idSach);
+		ResultSet rs = myConn.getNames("sach", "TenSach", "idSach", idSach);
 		String tenSach = "";
 		try {
 			if (rs.next()) {
-				ResultSet rs1 = myConn.getNames("Sach", "TrangThai", "idSach", idSach);
+				ResultSet rs1 = myConn.getNames("sach", "TrangThai", "idSach", idSach);
 				if(rs1.next()) {
 					int trangThai = rs1.getInt(1);
 					if(trangThai == 0) {
@@ -284,7 +284,7 @@ public class ChiTietMuonTra extends JDialog implements ActionListener {
 					}
 				}
 				tenSach = rs.getString(1);
-				if (myConn.insert("ChiTietMuonTra", null, null, null, null,
+				if (myConn.insert("chitietmuontra", null, null, null, null,
 						new quanlythuvien.object.ChiTietMuonTra(muonTra[0], idSach, "", 0))) {
 					((DefaultTableModel) table.getModel()).addRow(new Object[] { idSach, tenSach, "", "" });
 					//cap nhat lai trang thai cua sach

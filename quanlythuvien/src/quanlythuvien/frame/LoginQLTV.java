@@ -216,7 +216,7 @@ public class LoginQLTV extends JFrame {
 	}
 
 	private boolean checkTK(String user, String pw) {
-		ResultSet rs = myConn.getDataID("TaiKhoan", "idTaiKhoan", "All", "");
+		ResultSet rs = myConn.getDataID("taikhoan", "idTaiKhoan", "All", "");
 		try {
 			while (rs.next()) {
 				tenTK = rs.getString(1);
