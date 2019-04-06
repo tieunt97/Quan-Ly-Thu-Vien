@@ -137,6 +137,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
+INSERT INTO `quanlythuvien_20153752`.`taikhoan` VALUE('admin', 'admin', 'admin');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
